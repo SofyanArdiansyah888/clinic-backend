@@ -11,6 +11,7 @@ const (
 	AntrianPasien    Status = "pasien"
 	AntrianPerawatan Status = "perawatan"
 	AntrianSelesai   Status = "selesai"
+	AntrianBatal     Status = "batal"
 )
 
 type Antrian struct {
