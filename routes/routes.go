@@ -4,7 +4,7 @@ import (
 	"backend/modules/antrian"
 	generateNumber "backend/modules/generateNumber"
 	"backend/modules/pasien"
-	"backend/modules/riwayatPerawatan"
+	"backend/modules/perawatan"
 	"backend/modules/staff"
 	"backend/modules/supplier"
 	"backend/modules/treatment"
@@ -19,5 +19,5 @@ func SetupRoutes(app *fiber.App) {
 	generateNumber.RegisterRoutes(api)
 	treatment.RegisterRoutes(api)
 	supplier.RegisterRoutes(api)
-	riwayatPerawatan.RegisterRoutes(api)
+	perawatan.RegisterRoutes(api)
 }

@@ -1,4 +1,4 @@
-package riwayatPerawatan
+package perawatan
 
 import (
 	"backend/config"
@@ -9,15 +9,15 @@ import (
 )
 
 type Controller struct {
-	service IRiwayatPerawatanService
+	service IPerawatanService
 }
 
-func NewRiwayatPerawatanController(service IRiwayatPerawatanService) *Controller {
+func NewPerawatanController(service IPerawatanService) *Controller {
 	return &Controller{service}
 }
 
 func (h *Controller) Index(c *fiber.Ctx) error {
-	var pasiens []models.RiwayatPerawatan
+	var pasiens []models.Perawatan
 
 	//db := h.service.(*pasienService).repo.GetDB()
 
@@ -44,14 +44,14 @@ func (h *Controller) Show(c *fiber.Ctx) error {
 	pasien, err := h.service.GetByID(uint(id))
 	if err != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-			"error": "RiwayatPerawatan tidak ditemukan",
+			"error": "Perawatan tidak ditemukan",
 		})
 	}
 	return c.JSON(pasien)
 }
 
 func (h *Controller) Store(c *fiber.Ctx) error {
-	var pasien models.RiwayatPerawatan
+	var pasien models.Perawatan
 	if err := c.BodyParser(&pasien); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "Data tidak valid",
@@ -72,7 +72,7 @@ func (h *Controller) Update(c *fiber.Ctx) error {
 	idParam := c.Params("id")
 	id, _ := strconv.Atoi(idParam)
 
-	var pasien models.RiwayatPerawatan
+	var pasien models.Perawatan
 	if err := c.BodyParser(&pasien); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "Data tidak valid",
@@ -87,7 +87,7 @@ func (h *Controller) Update(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(fiber.Map{
-		"message": "RiwayatPerawatan berhasil diupdate",
+		"message": "Perawatan berhasil diupdate",
 	})
 }
 
@@ -103,6 +103,6 @@ func (h *Controller) Delete(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(fiber.Map{
-		"message": "Riwayat Perawatan berhasil dihapus",
+		"message": " Perawatan berhasil dihapus",
 	})
 }
