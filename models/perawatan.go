@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-type RiwayatPerawatan struct {
+type Perawatan struct {
 	ID          int                  `gorm:"primary_key" json:"id"`
 	IDAntrian   int64                `gorm:"not null" json:"id_antrian"`
 	IDPasien    int64                `gorm:"not null" json:"id_pasien"`

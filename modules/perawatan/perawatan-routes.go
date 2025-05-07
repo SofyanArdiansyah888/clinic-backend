@@ -1,4 +1,4 @@
-package riwayatPerawatan
+package perawatan
 
 import (
 	"backend/config"
@@ -6,8 +6,8 @@ import (
 )
 
 func RegisterRoutes(api fiber.Router) {
-	controller := NewRiwayatPerawatanController(NewRiwayatPerawatanService(NewRiwayatPerawatanRepository(config.DB)))
-	pasienRoutes := api.Group("/pasien")
+	controller := NewPerawatanController(NewPerawatanService(NewPerawatanRepository(config.DB)))
+	pasienRoutes := api.Group("/perawatan")
 	pasienRoutes.Get("/", controller.Index)
 	pasienRoutes.Get("/:id", controller.Show)
 	pasienRoutes.Post("/", controller.Store)
