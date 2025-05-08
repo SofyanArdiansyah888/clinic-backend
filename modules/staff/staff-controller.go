@@ -22,7 +22,7 @@ func (h *Controller) Index(c *fiber.Ctx) error {
 		c,
 		config.DB,
 		&staffs,
-		[]string{"nama", "alamat", "no_staff", "telepon", "jabatan", "level"},
+		[]string{"nama", "no_staff", "jabatan", "level", "telepon"},
 		[]string{"jabatan", "level"},
 	)
 	if err != nil {

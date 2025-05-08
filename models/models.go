@@ -13,6 +13,6 @@ func GetModels() Models {
 		&Treatment{},
 		&Antrian{},
 		&Supplier{},
-		&RiwayatPerawatan{},
+		&Perawatan{},
 	}
 }

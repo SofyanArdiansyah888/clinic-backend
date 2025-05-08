@@ -22,13 +22,11 @@ func (h *Controller) Index(c *fiber.Ctx) error {
 		c,
 		config.DB,
 		&treatments,
-		[]string{"nama", "alamat", "no_treatment", "telepon", "jabatan", "level"},
-		[]string{"jabatan", "level"},
+		[]string{"no_treatment", "nama_treatment", "jenis_treatment", "waktu_pengerjaan"},
+		[]string{"jenis_treatment"},
 	)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Gagal mengambil data treatment",
-		})
+		return utils.Error(c, fiber.StatusInternalServerError, "Gagal mengambil data treatment", err.Error())
 	}
 
 	return c.JSON(paginated)
