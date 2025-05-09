@@ -2,6 +2,7 @@ package routes
 
 import (
 	"backend/modules/antrian"
+	"backend/modules/bank"
 	generateNumber "backend/modules/generateNumber"
 	"backend/modules/pasien"
 	"backend/modules/perawatan"
@@ -29,4 +30,5 @@ func SetupRoutes(app *fiber.App) {
 	supplier.RegisterRoutes(api)
 	perawatan.RegisterRoutes(api)
 	perusahaan.RegisterRoutes(api)
+	bank.RegisterRoutes(api)
 }
