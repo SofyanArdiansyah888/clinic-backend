@@ -53,7 +53,7 @@ func (h *Controller) Store(c *fiber.Ctx) error {
 		return utils.Error(c, fiber.StatusInternalServerError, "Gagal membuat staff", err.Error())
 	}
 
-	return c.Status(fiber.StatusCreated).JSON(staff)
+	return utils.Success(c, "Staff berhasil dibuat", fiber.StatusCreated)
 }
 
 func (h *Controller) Update(c *fiber.Ctx) error {
