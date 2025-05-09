@@ -22,7 +22,7 @@ func (h *Controller) Index(c *fiber.Ctx) error {
 		c,
 		config.DB,
 		&staffs,
-		[]string{"nama", "alamat", "no_staff", "telepon", "jabatan", "level"},
+		[]string{"nama", "no_staff", "jabatan", "level", "telepon"},
 		[]string{"jabatan", "level"},
 	)
 	if err != nil {
@@ -53,7 +53,7 @@ func (h *Controller) Store(c *fiber.Ctx) error {
 		return utils.Error(c, fiber.StatusInternalServerError, "Gagal membuat staff", err.Error())
 	}
 
-	return c.Status(fiber.StatusCreated).JSON(staff)
+	return utils.Success(c, "Staff berhasil dibuat", fiber.StatusCreated)
 }
 
 func (h *Controller) Update(c *fiber.Ctx) error {

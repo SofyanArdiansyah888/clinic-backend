@@ -2,9 +2,11 @@ package routes
 
 import (
 	"backend/modules/antrian"
+	"backend/modules/bank"
 	generateNumber "backend/modules/generateNumber"
 	"backend/modules/pasien"
 	"backend/modules/perawatan"
+	"backend/modules/perusahaan"
 	"backend/modules/staff"
 	"backend/modules/supplier"
 	"backend/modules/treatment"
@@ -12,6 +14,13 @@ import (
 )
 
 func SetupRoutes(app *fiber.App) {
+	// SETUP STATIC FILE SERVING
+	app.Static("/", "./tmp")
+	app.Use(func(c *fiber.Ctx) error {
+		return c.SendFile("./tmp/index.html")
+	})
+
+	// SETUP API ROUTES
 	api := app.Group("/api")
 	pasien.RegisterRoutes(api)
 	antrian.RegisterRoutes(api)
@@ -20,4 +29,6 @@ func SetupRoutes(app *fiber.App) {
 	treatment.RegisterRoutes(api)
 	supplier.RegisterRoutes(api)
 	perawatan.RegisterRoutes(api)
+	perusahaan.RegisterRoutes(api)
+	bank.RegisterRoutes(api)
 }

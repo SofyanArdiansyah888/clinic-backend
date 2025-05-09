@@ -1,4 +1,4 @@
-package treatment
+package bank
 
 import (
 	"backend/config"
@@ -9,24 +9,27 @@ import (
 )
 
 type Controller struct {
-	service ITreatmentService
+	service IBankService
 }
 
-func NewTreatmentController(service ITreatmentService) *Controller {
+func NewBankController(service IBankService) *Controller {
 	return &Controller{service}
 }
 
 func (h *Controller) Index(c *fiber.Ctx) error {
-	var treatments []models.Treatment
+	var banks []models.Bank
+
+	//db := h.service.(*bankService).repo.GetDB()
+
 	paginated, err := utils.Paginate(
 		c,
 		config.DB,
-		&treatments,
-		[]string{"no_treatment", "nama_treatment", "jenis_treatment", "waktu_pengerjaan"},
-		[]string{"jenis_treatment"},
+		&banks,
+		[]string{"nama", "no_bank", "telepon", "alamat"},
+		[]string{},
 	)
 	if err != nil {
-		return utils.Error(c, fiber.StatusInternalServerError, "Gagal mengambil data treatment", err.Error())
+		return utils.Error(c, 500, "Gagal mengambil data bank", err.Error())
 	}
 
 	return c.JSON(paginated)
@@ -36,56 +39,53 @@ func (h *Controller) Show(c *fiber.Ctx) error {
 	idParam := c.Params("id")
 	id, _ := strconv.Atoi(idParam)
 
-	treatment, err := h.service.GetByID(uint(id))
+	bank, err := h.service.GetByID(uint(id))
 	if err != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-			"error": "Treatment tidak ditemukan",
+			"error": "Bank tidak ditemukan",
 		})
 	}
-	return c.JSON(treatment)
+	return c.JSON(bank)
 }
 
 func (h *Controller) Store(c *fiber.Ctx) error {
-	var treatment models.Treatment
-	if err := c.BodyParser(&treatment); err != nil {
+	var bank models.Bank
+	if err := c.BodyParser(&bank); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "Data tidak valid",
 		})
 	}
 
-	err := h.service.Create(&treatment)
+	err := h.service.Create(&bank)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error":   "Gagal membuat treatment",
-			"message": err.Error(),
+			"error": "Gagal membuat bank",
 		})
 	}
 
-	return c.Status(fiber.StatusCreated).JSON(treatment)
+	return c.Status(fiber.StatusCreated).JSON(bank)
 }
 
 func (h *Controller) Update(c *fiber.Ctx) error {
 	idParam := c.Params("id")
 	id, _ := strconv.Atoi(idParam)
 
-	var treatment models.Treatment
-	if err := c.BodyParser(&treatment); err != nil {
+	var bank models.Bank
+	if err := c.BodyParser(&bank); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error":   "Data tidak valid",
-			"message": err.Error(),
+			"error": "Data tidak valid",
 		})
 	}
 
-	err := h.service.Update(uint(id), &treatment)
+	err := h.service.Update(uint(id), &bank)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error":   "Gagal update treatment",
-			"message": err.Error(),
+			"error": "Gagal update bank",
 		})
 	}
 
 	return c.JSON(fiber.Map{
-		"message": "Treatment berhasil diupdate",
+		"message": "Bank berhasil diupdate",
 	})
 }
 
@@ -96,12 +96,11 @@ func (h *Controller) Delete(c *fiber.Ctx) error {
 	err := h.service.Delete(uint(id))
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error":   "Gagal hapus treatment",
-			"message": err.Error(),
+			"error": "Gagal hapus bank",
 		})
 	}
 
 	return c.JSON(fiber.Map{
-		"message": "Treatment berhasil dihapus",
+		"message": "Bank berhasil dihapus",
 	})
 }
