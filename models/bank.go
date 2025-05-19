@@ -17,7 +17,7 @@ type Bank struct {
 	Cabang     Cabang    `gorm:"foreignKey:IDCabang" json:"cabang"`
 	NoBank     string    `gorm:"unique" json:"no_bank" validate:"required"`
 	NamaBank   string    `gorm:"string" json:"nama_bank"`
-	JenisBank  JenisBank `gorm:"type:enum('bank','e-money')" json:"jenis_bank"`
+	JenisBank  JenisBank `json:"jenis_bank" validate:"required"`
 	SaldoAwal  float64   `gorm:"type:float;default:0" json:"saldo_awal"`
 	NoRekening string    `gorm:"string" json:"no_rekening"`
 	AtasNama   string    `gorm:"string" json:"atas_nama"`
