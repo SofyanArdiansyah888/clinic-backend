@@ -23,8 +23,8 @@ func (h *Controller) Index(c *fiber.Ctx) error {
 		c,
 		config.DB.Preload("Cabang"),
 		&banks,
-		[]string{"nama_bank", "no_bank", "jenis_bank"},
-		[]string{"jenis_bank"},
+		[]string{"nama_bank", "no_bank", "jenis_bank", "no_rekening", "atas_nama"},
+		[]string{"nama_bank"},
 	)
 	if err != nil {
 		return utils.Error(c, fiber.StatusInternalServerError, "Gagal mengambil data bank", err.Error())
@@ -33,8 +33,7 @@ func (h *Controller) Index(c *fiber.Ctx) error {
 }
 
 func (h *Controller) Show(c *fiber.Ctx) error {
-	idParam := c.Params("id")
-	id, err := strconv.Atoi(idParam)
+	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		return utils.Error(c, fiber.StatusBadRequest, "ID tidak valid", err.Error())
 	}
@@ -48,33 +47,8 @@ func (h *Controller) Show(c *fiber.Ctx) error {
 
 func (h *Controller) Store(c *fiber.Ctx) error {
 	var bank models.Bank
-
-	// Parse body JSON
 	if err := c.BodyParser(&bank); err != nil {
-		// Coba parse id_cabang dari form atau JSON string
-		idCabangStr := c.FormValue("id_cabang")
-		if idCabangStr == "" {
-			// Coba ambil dari body JSON
-			body := make(map[string]interface{})
-			if err := c.BodyParser(&body); err == nil {
-				if idCabang, ok := body["id_cabang"].(string); ok {
-					idCabangStr = idCabang
-				}
-			}
-		}
-
-		// Konversi id_cabang ke uint
-		if idCabangStr != "" {
-			idCabang, err := strconv.ParseUint(idCabangStr, 10, 32)
-			if err != nil {
-				return utils.Error(c, fiber.StatusBadRequest, "ID Cabang harus berupa angka valid", err.Error())
-			}
-			bank.IDCabang = uint(idCabang)
-		}
-	}
-
-	if bank.IDCabang == 0 {
-		return utils.Error(c, fiber.StatusBadRequest, "ID Cabang harus diisi", "")
+		return utils.Error(c, fiber.StatusBadRequest, "Format data tidak valid", err.Error())
 	}
 
 	err := h.service.Create(&bank)
@@ -86,42 +60,15 @@ func (h *Controller) Store(c *fiber.Ctx) error {
 }
 
 func (h *Controller) Update(c *fiber.Ctx) error {
-	idParam := c.Params("id")
-	id, err := strconv.Atoi(idParam)
+	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		return utils.Error(c, fiber.StatusBadRequest, "ID tidak valid", err.Error())
 	}
 
 	var bank models.Bank
-
-	// Parse body JSON
 	if err := c.BodyParser(&bank); err != nil {
-		// Coba parse id_cabang dari form atau JSON string
-		idCabangStr := c.FormValue("id_cabang")
-		if idCabangStr == "" {
-			// Coba ambil dari body JSON
-			body := make(map[string]interface{})
-			if err := c.BodyParser(&body); err == nil {
-				if idCabang, ok := body["id_cabang"].(string); ok {
-					idCabangStr = idCabang
-				}
-			}
-		}
-
-		// Konversi id_cabang ke uint
-		if idCabangStr != "" {
-			idCabang, err := strconv.ParseUint(idCabangStr, 10, 32)
-			if err != nil {
-				return utils.Error(c, fiber.StatusBadRequest, "ID Cabang harus berupa angka valid", err.Error())
-			}
-			bank.IDCabang = uint(idCabang)
-		}
+		return utils.Error(c, fiber.StatusBadRequest, "Format data tidak valid", err.Error())
 	}
-
-	if bank.IDCabang == 0 {
-		return utils.Error(c, fiber.StatusBadRequest, "ID Cabang harus diisi", "")
-	}
-
 	err = h.service.Update(uint(id), &bank)
 	if err != nil {
 		return utils.Error(c, fiber.StatusInternalServerError, "Gagal update bank", err.Error())
@@ -131,17 +78,14 @@ func (h *Controller) Update(c *fiber.Ctx) error {
 }
 
 func (h *Controller) Delete(c *fiber.Ctx) error {
-	idParam := c.Params("id")
-	id, _ := strconv.Atoi(idParam)
-
-	err := h.service.Delete(uint(id))
+	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Gagal hapus bank",
-		})
+		return utils.Error(c, fiber.StatusBadRequest, "ID tidak valid", err.Error())
 	}
 
-	return c.JSON(fiber.Map{
-		"message": "Bank berhasil dihapus",
-	})
+	if err := h.service.Delete(uint(id)); err != nil {
+		return utils.Error(c, fiber.StatusInternalServerError, "Gagal hapus bank", err.Error())
+	}
+
+	return utils.Success(c, "Bank berhasil dihapus", fiber.StatusOK)
 }
