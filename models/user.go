@@ -1,8 +1,32 @@
 package models
 
 import (
+	"database/sql/driver"
+	"encoding/json"
+	"errors"
 	"time"
 )
+
+// Custom type for Akses
+type StringArray []string
+
+// Implement the driver.Valuer interface
+func (a StringArray) Value() (driver.Value, error) {
+	return json.Marshal(a)
+}
+
+// Implement the sql.Scanner interface
+func (a *StringArray) Scan(value interface{}) error {
+	if value == nil {
+		*a = nil
+		return nil
+	}
+	b, ok := value.([]byte)
+	if !ok {
+		return errors.New("type assertion to []byte failed")
+	}
+	return json.Unmarshal(b, a)
+}
 
 type Role string
 
@@ -18,14 +42,15 @@ const (
 )
 
 type User struct {
-	ID        uint      `gorm:"primaryKey" json:"id"`
-	CabangID  uint      `gorm:"primaryKey" json:"cabang_id"`
-	NoUser    string    `gorm:"unique" json:"nomor_user"`
-	Username  string    `gorm:"unique" json:"username"`
-	Nama      string    `json:"nama"`
-	Password  string    `json:"password"`
-	Akses     string    `json:"akses"`
-	Role      Role      `json:"role"`
-	CreatedAt time.Time `gorm:"autoCreateTime" json:"created_at"`
-	UpdatedAt time.Time `gorm:"autoUpdateTime" json:"updated_at"`
+	ID        uint        `gorm:"primaryKey" json:"id"`
+	CabangID  uint        `gorm:"primaryKey" json:"cabang_id"`
+	Cabang    Cabang      `gorm:"foreignKey:CabangID" json:"cabang"` // Add relation to Cabang
+	NoUser    string      `gorm:"unique" json:"nomor_user"`
+	Username  string      `gorm:"unique" json:"username"`
+	Nama      string      `json:"nama"`
+	Password  string      `json:"password"`
+	Akses     StringArray `gorm:"type:jsonb" json:"akses"` // Use JSONB type
+	Role      Role        `json:"role"`
+	CreatedAt time.Time   `gorm:"autoCreateTime" json:"created_at"`
+	UpdatedAt time.Time   `gorm:"autoUpdateTime" json:"updated_at"`
 }
