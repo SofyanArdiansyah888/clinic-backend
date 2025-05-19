@@ -4,8 +4,9 @@ import (
 	"backend/config"
 	"backend/models"
 	"backend/utils"
-	"github.com/gofiber/fiber/v2"
 	"strconv"
+
+	"github.com/gofiber/fiber/v2"
 )
 
 type Controller struct {
@@ -18,32 +19,28 @@ func NewBankController(service IBankService) *Controller {
 
 func (h *Controller) Index(c *fiber.Ctx) error {
 	var banks []models.Bank
-
-	//db := h.service.(*bankService).repo.GetDB()
-
 	paginated, err := utils.Paginate(
 		c,
-		config.DB,
+		config.DB.Preload("Cabang"),
 		&banks,
-		[]string{"nama", "no_bank", "telepon", "alamat"},
-		[]string{},
+		[]string{"nama_bank", "no_bank", "jenis_bank", "no_rekening", "atas_nama"},
+		[]string{"nama_bank"},
 	)
 	if err != nil {
-		return utils.Error(c, 500, "Gagal mengambil data bank", err.Error())
+		return utils.Error(c, fiber.StatusInternalServerError, "Gagal mengambil data bank", err.Error())
 	}
-
 	return c.JSON(paginated)
 }
 
 func (h *Controller) Show(c *fiber.Ctx) error {
-	idParam := c.Params("id")
-	id, _ := strconv.Atoi(idParam)
+	id, err := strconv.Atoi(c.Params("id"))
+	if err != nil {
+		return utils.Error(c, fiber.StatusBadRequest, "ID tidak valid", err.Error())
+	}
 
 	bank, err := h.service.GetByID(uint(id))
 	if err != nil {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-			"error": "Bank tidak ditemukan",
-		})
+		return utils.Error(c, fiber.StatusNotFound, "Bank tidak ditemukan", err.Error())
 	}
 	return c.JSON(bank)
 }
@@ -51,56 +48,44 @@ func (h *Controller) Show(c *fiber.Ctx) error {
 func (h *Controller) Store(c *fiber.Ctx) error {
 	var bank models.Bank
 	if err := c.BodyParser(&bank); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Data tidak valid",
-		})
+		return utils.Error(c, fiber.StatusBadRequest, "Format data tidak valid", err.Error())
 	}
 
 	err := h.service.Create(&bank)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Gagal membuat bank",
-		})
+		return utils.Error(c, fiber.StatusInternalServerError, "Gagal membuat bank", err.Error())
 	}
 
 	return c.Status(fiber.StatusCreated).JSON(bank)
 }
 
 func (h *Controller) Update(c *fiber.Ctx) error {
-	idParam := c.Params("id")
-	id, _ := strconv.Atoi(idParam)
+	id, err := strconv.Atoi(c.Params("id"))
+	if err != nil {
+		return utils.Error(c, fiber.StatusBadRequest, "ID tidak valid", err.Error())
+	}
 
 	var bank models.Bank
 	if err := c.BodyParser(&bank); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Data tidak valid",
-		})
+		return utils.Error(c, fiber.StatusBadRequest, "Format data tidak valid", err.Error())
 	}
-
-	err := h.service.Update(uint(id), &bank)
+	err = h.service.Update(uint(id), &bank)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Gagal update bank",
-		})
+		return utils.Error(c, fiber.StatusInternalServerError, "Gagal update bank", err.Error())
 	}
 
-	return c.JSON(fiber.Map{
-		"message": "Bank berhasil diupdate",
-	})
+	return utils.Success(c, "Bank berhasil diupdate", fiber.StatusOK)
 }
 
 func (h *Controller) Delete(c *fiber.Ctx) error {
-	idParam := c.Params("id")
-	id, _ := strconv.Atoi(idParam)
-
-	err := h.service.Delete(uint(id))
+	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Gagal hapus bank",
-		})
+		return utils.Error(c, fiber.StatusBadRequest, "ID tidak valid", err.Error())
 	}
 
-	return c.JSON(fiber.Map{
-		"message": "Bank berhasil dihapus",
-	})
+	if err := h.service.Delete(uint(id)); err != nil {
+		return utils.Error(c, fiber.StatusInternalServerError, "Gagal hapus bank", err.Error())
+	}
+
+	return utils.Success(c, "Bank berhasil dihapus", fiber.StatusOK)
 }

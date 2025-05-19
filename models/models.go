@@ -14,5 +14,7 @@ func GetModels() Models {
 		&Antrian{},
 		&Supplier{},
 		&Perawatan{},
+		&Cabang{},
+		&Bank{},
 	}
 }

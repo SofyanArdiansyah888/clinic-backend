@@ -5,13 +5,17 @@ import (
 )
 
 type Cabang struct {
-	ID           int        `gorm:"primary_key" json:"id"`
-	IDPerusahaan int64      `gorm:"not null" json:"id_perusahaan"`
-	NamaCabang   string     `gorm:"string" json:"nama_cabang"`
-	NoCabang     string     `gorm:"unique" json:"no_cabang" validate:"required"`
-	Alamat       string     `gorm:"type:text;null" json:"alamat,omitempty"`
-	Telepon      string     `gorm:"type:string;null" json:"telepon,omitempty"`
-	Perusahaan   Perusahaan `gorm:"foreignKey:IDPerusahaan" json:"perusahaan"`
-	CreatedAt    time.Time  `gorm:"autoCreateTime" json:"created_at"`
-	UpdatedAt    time.Time  `gorm:"autoUpdateTime" json:"updated_at"`
+	ID                    uint      `gorm:"primaryKey" json:"id"`
+	NoCabang              string    `gorm:"not null;unique" json:"no_cabang"`
+	NamaKlinik            string    `gorm:"not null" json:"nama_klinik"`
+	AlamatLengkap         string    `gorm:"not null" json:"alamat_lengkap"`
+	NoTelp                string    `json:"no_telp"`
+	NoHandphone           string    `json:"no_handphone"`
+	EmailKlinik           string    `gorm:"unique" json:"email_klinik"`
+	LatitudeLongitude     string    `json:"latitude_longitude"`
+	MarginHrgJualObat     float64   `json:"margin_hrg_jual_obat"`
+	TargetPemasukanHarian float64   `json:"target_pemasukan_harian"`
+	NominalDiskonReseller float64   `json:"nominal_diskon_reseller"`
+	CreatedAt             time.Time `gorm:"autoCreateTime" json:"created_at"`
+	UpdatedAt             time.Time `gorm:"autoUpdateTime" json:"updated_at"`
 }

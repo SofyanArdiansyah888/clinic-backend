@@ -3,11 +3,12 @@ package main
 import (
 	"backend/config"
 	"backend/routes"
+	"log"
+	"os"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/joho/godotenv"
-	"log"
-	"os"
 )
 
 func main() {
