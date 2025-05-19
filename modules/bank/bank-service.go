@@ -1,7 +1,9 @@
 package bank
 
 import (
+	"backend/config"
 	"backend/models"
+	"backend/utils"
 )
 
 type IBankService interface {
@@ -29,18 +31,17 @@ func (s *bankService) GetByID(id uint) (*models.Bank, error) {
 }
 
 func (s *bankService) Create(data *models.Bank) error {
-	//data.NoRM = utils.GenerateID(config.DB, "RMD", true)
-	//data.NoMember = utils.GenerateID(config.DB, "MEM", true)
+	data.NoBank = utils.GenerateID(config.DB, "BNK", true)
 	return s.repo.Create(data)
 }
 
 func (s *bankService) Update(id uint, data *models.Bank) error {
-	staff, err := s.repo.FindByID(id)
+	bank, err := s.repo.FindByID(id)
 	if err != nil {
 		return err
 	}
-	data.NoBank = staff.NoBank
-	data.ID = staff.ID
+	data.NoBank = bank.NoBank
+	data.ID = bank.ID
 	return s.repo.Update(data)
 }
 
