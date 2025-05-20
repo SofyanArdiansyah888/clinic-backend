@@ -4,8 +4,9 @@ import (
 	"backend/config"
 	"backend/models"
 	"backend/utils"
-	"github.com/gofiber/fiber/v2"
 	"strconv"
+
+	"github.com/gofiber/fiber/v2"
 )
 
 type Controller struct {
@@ -18,32 +19,28 @@ func NewSupplierController(service ISupplierService) *Controller {
 
 func (h *Controller) Index(c *fiber.Ctx) error {
 	var suppliers []models.Supplier
-
-	//db := h.service.(*supplierService).repo.GetDB()
-
 	paginated, err := utils.Paginate(
 		c,
 		config.DB,
 		&suppliers,
 		[]string{"nama", "no_supplier", "telepon", "alamat"},
-		[]string{},
+		[]string{"nama"},
 	)
 	if err != nil {
-		return utils.Error(c, 500, "Gagal mengambil data supplier", err.Error())
+		return utils.Error(c, fiber.StatusInternalServerError, "Gagal mengambil data supplier", err.Error())
 	}
-
 	return c.JSON(paginated)
 }
 
 func (h *Controller) Show(c *fiber.Ctx) error {
-	idParam := c.Params("id")
-	id, _ := strconv.Atoi(idParam)
+	id, err := strconv.Atoi(c.Params("id"))
+	if err != nil {
+		return utils.Error(c, fiber.StatusBadRequest, "ID tidak valid", err.Error())
+	}
 
 	supplier, err := h.service.GetByID(uint(id))
 	if err != nil {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-			"error": "Supplier tidak ditemukan",
-		})
+		return utils.Error(c, fiber.StatusNotFound, "Supplier tidak ditemukan", err.Error())
 	}
 	return c.JSON(supplier)
 }
@@ -51,15 +48,14 @@ func (h *Controller) Show(c *fiber.Ctx) error {
 func (h *Controller) Store(c *fiber.Ctx) error {
 	var supplier models.Supplier
 	if err := c.BodyParser(&supplier); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Data tidak valid",
-		})
+		return utils.Error(c, fiber.StatusBadRequest, "Data tidak valid", err.Error())
 	}
 
 	err := h.service.Create(&supplier)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Gagal membuat supplier",
+			"error":   "Gagal membuat supplier",
+			"message": err.Error(),
 		})
 	}
 
@@ -67,40 +63,32 @@ func (h *Controller) Store(c *fiber.Ctx) error {
 }
 
 func (h *Controller) Update(c *fiber.Ctx) error {
-	idParam := c.Params("id")
-	id, _ := strconv.Atoi(idParam)
+	id, err := strconv.Atoi(c.Params("id"))
+	if err != nil {
+		return utils.Error(c, fiber.StatusBadRequest, "ID tidak valid", err.Error())
+	}
 
 	var supplier models.Supplier
 	if err := c.BodyParser(&supplier); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Data tidak valid",
-		})
+		return utils.Error(c, fiber.StatusBadRequest, "Data tidak valid", err.Error())
 	}
 
-	err := h.service.Update(uint(id), &supplier)
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Gagal update supplier",
-		})
+	if err := h.service.Update(uint(id), &supplier); err != nil {
+		return utils.Error(c, fiber.StatusInternalServerError, "Gagal update supplier", err.Error())
 	}
 
-	return c.JSON(fiber.Map{
-		"message": "Supplier berhasil diupdate",
-	})
+	return utils.Success(c, "Supplier berhasil diupdate", fiber.StatusOK)
 }
 
 func (h *Controller) Delete(c *fiber.Ctx) error {
-	idParam := c.Params("id")
-	id, _ := strconv.Atoi(idParam)
-
-	err := h.service.Delete(uint(id))
+	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Gagal hapus supplier",
-		})
+		return utils.Error(c, fiber.StatusBadRequest, "ID tidak valid", err.Error())
 	}
 
-	return c.JSON(fiber.Map{
-		"message": "Supplier berhasil dihapus",
-	})
+	if err := h.service.Delete(uint(id)); err != nil {
+		return utils.Error(c, fiber.StatusInternalServerError, "Gagal hapus supplier", err.Error())
+	}
+
+	return utils.Success(c, "Supplier berhasil dihapus", fiber.StatusOK)
 }

@@ -24,7 +24,7 @@ func (h *Controller) Index(c *fiber.Ctx) error {
 		config.DB.Preload("Cabang"),
 		&banks,
 		[]string{"nama_bank", "no_bank", "jenis_bank", "no_rekening", "atas_nama"},
-		[]string{"nama_bank"},
+		[]string{"jenis_bank"},
 	)
 	if err != nil {
 		return utils.Error(c, fiber.StatusInternalServerError, "Gagal mengambil data bank", err.Error())

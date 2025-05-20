@@ -4,8 +4,9 @@ import (
 	"backend/models"
 	"errors"
 	"fmt"
-	"gorm.io/gorm"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 func GenerateID(db *gorm.DB, model string, update bool) string {
@@ -23,7 +24,7 @@ func GenerateID(db *gorm.DB, model string, update bool) string {
 			Counter:   1,
 		}
 		if update {
-			if err := db.Create(&seq).Error; err != nil {
+			if createErr := db.Create(&seq).Error; createErr != nil {
 				return ""
 			}
 		}
