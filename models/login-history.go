@@ -6,7 +6,7 @@ import (
 
 type LoginHistory struct {
 	ID        uint      `gorm:"primaryKey" json:"id"`
-	UserID    uint      `gorm:"primaryKey" json:"user_id"`
+	IDUser    uint      `gorm:"primaryKey" json:"id_user"`
 	Username  string    `json:"username"`
 	Waktu     int64     `gorm:"datetime" json:"waktu"`
 	Asal      string    `json:"asal"`

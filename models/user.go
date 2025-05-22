@@ -43,8 +43,8 @@ const (
 
 type User struct {
 	ID        uint        `gorm:"primaryKey" json:"id"`
-	CabangID  uint        `gorm:"primaryKey" json:"cabang_id"`
-	Cabang    Cabang      `gorm:"foreignKey:CabangID" json:"cabang"` // Add relation to Cabang
+	IDCabang  int64       `gorm:"not null" json:"id_cabang"`
+	Cabang    *Cabang     `gorm:"foreignKey:IDCabang;" json:"cabang"`
 	NoUser    string      `gorm:"unique" json:"nomor_user"`
 	Username  string      `gorm:"unique" json:"username"`
 	Nama      string      `json:"nama"`
