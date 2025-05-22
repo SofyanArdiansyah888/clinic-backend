@@ -25,7 +25,7 @@ type Antrian struct {
 	Barcode   string               `json:"barcode"`
 	Name      string               `json:"name"`
 	Foto      string               `gorm:"null" json:"foto"`
-	Status    Status               `json:"status" default:"pasien"`
+	Status    Status               `json:"status" gorm:"default:pasien"`
 	CreatedAt time.Time            `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt time.Time            `gorm:"autoUpdateTime" json:"updated_at"`
 }

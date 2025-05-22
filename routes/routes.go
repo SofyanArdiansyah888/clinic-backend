@@ -11,6 +11,7 @@ import (
 	"backend/modules/promo"
 	"backend/modules/staff"
 	"backend/modules/supplier"
+	"backend/modules/templateConcern"
 	"backend/modules/treatment"
 	"backend/modules/user"
 
@@ -36,6 +37,7 @@ func SetupRoutes(app *fiber.App) {
 	perusahaan.RegisterRoutes(api)
 	bank.RegisterRoutes(api)
 	cabang.RegisterRoutes(api)
-	user.RegisterRoutes(api)  // Tambahkan registrasi route user
-	promo.RegisterRoutes(api) // Tambahkan registrasi route promo
+	user.RegisterRoutes(api)            // Tambahkan registrasi route user
+	promo.RegisterRoutes(api)           // Tambahkan registrasi route promo
+	templateConcern.RegisterRoutes(api) // Tambahkan registrasi route template concern
 }
