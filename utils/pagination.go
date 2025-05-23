@@ -26,11 +26,21 @@ func Paginate(c *fiber.Ctx, db *gorm.DB, model interface{}, searchableFields []s
 	query := db.Model(model)
 
 	// === SEARCH ===
+	//@TODO: implement this when using postgres
+	//if search != "" && len(searchableFields) > 0 {
+	//	var conditions []string
+	//	var values []interface{}
+	//	for _, field := range searchableFields {
+	//		conditions = append(conditions, "CAST("+field+" AS TEXT) ILIKE ?")
+	//		values = append(values, "%"+search+"%")
+	//	}
+	//	query = query.Where(strings.Join(conditions, " OR "), values...)
+	//}
 	if search != "" && len(searchableFields) > 0 {
 		var conditions []string
 		var values []interface{}
 		for _, field := range searchableFields {
-			conditions = append(conditions, "CAST("+field+" AS TEXT) ILIKE ?")
+			conditions = append(conditions, "CAST("+field+" AS CHAR) LIKE ?")
 			values = append(values, "%"+search+"%")
 		}
 		query = query.Where(strings.Join(conditions, " OR "), values...)

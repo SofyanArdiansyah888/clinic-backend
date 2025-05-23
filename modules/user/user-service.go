@@ -56,6 +56,12 @@ func (s *userService) Create(data *models.User) error {
 	}
 	data.Password = string(hashedPassword)
 
+	// Cek apakah username telah ada
+	existingUser, err := s.repo.FindByUsername(data.Username)
+	if err == nil && existingUser != nil {
+		return errors.New("Username telah digunakan")
+	}
+
 	return s.repo.Create(data)
 }
 

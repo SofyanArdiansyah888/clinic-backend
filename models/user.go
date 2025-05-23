@@ -42,14 +42,16 @@ const (
 )
 
 type User struct {
-	ID        uint        `gorm:"primaryKey" json:"id"`
-	IDCabang  int64       `gorm:"not null" json:"id_cabang"`
-	Cabang    *Cabang     `gorm:"foreignKey:IDCabang;" json:"cabang"`
-	NoUser    string      `gorm:"unique" json:"nomor_user"`
-	Username  string      `gorm:"unique" json:"username"`
-	Nama      string      `json:"nama"`
-	Password  string      `json:"password"`
-	Akses     StringArray `gorm:"type:jsonb" json:"akses"` // Use JSONB type
+	ID       uint    `gorm:"primaryKey" json:"id"`
+	IDCabang int64   `gorm:"not null" json:"id_cabang"`
+	Cabang   *Cabang `gorm:"foreignKey:IDCabang;" json:"cabang"`
+	NoUser   string  `gorm:"unique" json:"nomor_user"`
+	Username string  `gorm:"unique" json:"username"`
+	Nama     string  `json:"nama"`
+	Password string  `json:"password"`
+	//@TODO: gorm:"type:jsonb" json:"akses"`
+	//Akses     StringArray `gorm:"type:jsonb" json:"akses"`
+	Akses     StringArray `gorm:"type:json" json:"akses"`
 	Role      Role        `json:"role"`
 	CreatedAt time.Time   `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt time.Time   `gorm:"autoUpdateTime" json:"updated_at"`

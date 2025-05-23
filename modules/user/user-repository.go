@@ -1,46 +1,53 @@
 package user
 
 import (
-    "backend/models"
-    "gorm.io/gorm"
+	"backend/models"
+	"gorm.io/gorm"
 )
 
 type IUserRepository interface {
-    FindAll() ([]models.User, error)
-    FindByID(id uint) (*models.User, error)
-    Create(user *models.User) error
-    Update(user *models.User) error
-    Delete(id uint) error
+	FindAll() ([]models.User, error)
+	FindByID(id uint) (*models.User, error)
+	Create(user *models.User) error
+	Update(user *models.User) error
+	Delete(id uint) error
+	FindByUsername(username string) (*models.User, error)
 }
 
 type userRepository struct {
-    db *gorm.DB
+	db *gorm.DB
 }
 
 func NewUserRepository(db *gorm.DB) IUserRepository {
-    return &userRepository{db: db}
+	return &userRepository{db: db}
 }
 
 func (r *userRepository) FindAll() ([]models.User, error) {
-    var users []models.User
-    err := r.db.Find(&users).Error
-    return users, err
+	var users []models.User
+	err := r.db.Find(&users).Error
+	return users, err
 }
 
 func (r *userRepository) FindByID(id uint) (*models.User, error) {
-    var user models.User
-    err := r.db.First(&user, id).Error
-    return &user, err
+	var user models.User
+	err := r.db.First(&user, id).Error
+	return &user, err
+}
+
+func (r *userRepository) FindByUsername(username string) (*models.User, error) {
+	var user models.User
+	err := r.db.Where("username = ?", username).First(&user).Error
+	return &user, err
 }
 
 func (r *userRepository) Create(user *models.User) error {
-    return r.db.Create(user).Error
+	return r.db.Create(user).Error
 }
 
 func (r *userRepository) Update(user *models.User) error {
-    return r.db.Save(user).Error
+	return r.db.Save(user).Error
 }
 
 func (r *userRepository) Delete(id uint) error {
-    return r.db.Delete(&models.User{}, id).Error
+	return r.db.Delete(&models.User{}, id).Error
 }

@@ -4,6 +4,7 @@ import (
 	"backend/config"
 	"backend/models"
 	"backend/utils"
+	"fmt"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
@@ -24,7 +25,7 @@ func (h *Controller) Index(c *fiber.Ctx) error {
 		c,
 		query,
 		&users,
-		[]string{"nama", "email", "no_user", "role"},
+		[]string{"nama", "username", "role"},
 		[]string{"nama"},
 	)
 	if err != nil {
@@ -88,4 +89,22 @@ func (h *Controller) Delete(c *fiber.Ctx) error {
 	}
 
 	return utils.Success(c, "User berhasil dihapus", fiber.StatusOK)
+}
+
+func SeedUsers(c *fiber.Ctx) error {
+	for i := 1; i <= 30; i++ {
+		user := models.User{
+			Nama:     fmt.Sprintf("User %d", i),
+			Username: fmt.Sprintf("user%d", i),
+			Role:     "user",
+			IDCabang: 1,
+			NoUser:   utils.GenerateID(config.DB, "USR", true),
+			Password: "password", // use a hashed password in a real application
+		}
+
+		if err := config.DB.Create(&user).Error; err != nil {
+			return utils.Error(c, fiber.StatusInternalServerError, "Gagal seeding data user", err.Error())
+		}
+	}
+	return utils.Success(c, "Berhasil seeding 30 user", fiber.StatusOK)
 }
