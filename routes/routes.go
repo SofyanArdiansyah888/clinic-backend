@@ -6,6 +6,7 @@ import (
 	"backend/modules/bank"
 	"backend/modules/cabang"
 	generateNumber "backend/modules/generateNumber"
+	"backend/modules/membership"
 	"backend/modules/pasien"
 	"backend/modules/perawatan"
 	"backend/modules/perusahaan"
@@ -42,4 +43,5 @@ func SetupRoutes(app *fiber.App) {
 	promo.RegisterRoutes(api)           // Tambahkan registrasi route promo
 	templateConcern.RegisterRoutes(api) // Tambahkan registrasi route template concern
 	appointment.RegisterRoutes(api)     // Tambahkan registrasi route appointment
+	membership.RegisterRoutes(api)      // Tambahkan registrasi route membership
 }
