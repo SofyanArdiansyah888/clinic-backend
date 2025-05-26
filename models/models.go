@@ -17,5 +17,6 @@ func GetModels() Models {
 		&Cabang{},
 		&Bank{},
 		&TemplateConcern{},
+		&Appointment{},
 	}
 }
