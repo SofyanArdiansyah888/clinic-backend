@@ -37,3 +37,6 @@
 - Follow security best practices
 - Maintain audit logs
 - Use proper authentication/authorization
+- Don't add additional library
+- Only use library that already define before
+- Use go fiber as import not gin or other libraries

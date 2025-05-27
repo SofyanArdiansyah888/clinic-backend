@@ -19,5 +19,6 @@ func GetModels() Models {
 		&TemplateConcern{},
 		&Appointment{},
 		&Membership{},
+		&Voucher{},
 	}
 }

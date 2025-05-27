@@ -16,6 +16,7 @@ import (
 	"backend/modules/templateConcern"
 	"backend/modules/treatment"
 	"backend/modules/user"
+	"backend/modules/voucher"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -44,4 +45,5 @@ func SetupRoutes(app *fiber.App) {
 	templateConcern.RegisterRoutes(api) // Tambahkan registrasi route template concern
 	appointment.RegisterRoutes(api)     // Tambahkan registrasi route appointment
 	membership.RegisterRoutes(api)      // Tambahkan registrasi route membership
+	voucher.RegisterRoutes(api)         // Tambahkan registrasi route voucher
 }
