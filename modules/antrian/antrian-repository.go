@@ -34,7 +34,7 @@ func (r *antrianRepository) FindByID(id uint) (*models.Antrian, error) {
 }
 
 func (r *antrianRepository) Create(antrian *models.Antrian) error {
-	return r.db.Create(antrian).Error
+	return r.db.Omit("Pasien", "Staff").Create(antrian).Error
 }
 
 func (r *antrianRepository) Update(antrian *models.Antrian) error {

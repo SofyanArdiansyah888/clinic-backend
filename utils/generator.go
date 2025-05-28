@@ -15,7 +15,7 @@ func GenerateID(db *gorm.DB, model string, update bool) string {
 	yearMonth := year + month
 
 	var seq models.MonthlySequence
-	err := db.Where("model = ? AND year_month = ?", model, yearMonth).First(&seq).Error
+	err := db.Where("`model` = ? AND `year_month` = ?", model, yearMonth).First(&seq).Error
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		seq = models.MonthlySequence{
