@@ -24,7 +24,7 @@ func (h *Controller) Index(c *fiber.Ctx) error {
 		config.DB,
 		&barangs,
 		[]string{"nama_barang", "kode_barang"},
-		[]string{"kode_barang"},
+		[]string{"satuan","jenis_barang"},
 	)
 	if err != nil {
 		return utils.Error(c, fiber.StatusInternalServerError, "Gagal mengambil data barang", err.Error())

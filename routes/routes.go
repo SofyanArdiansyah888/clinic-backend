@@ -17,7 +17,7 @@ import (
 	"backend/modules/treatment"
 	"backend/modules/user"
 	"backend/modules/voucher"
-
+	"backend/modules/barang"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -46,4 +46,5 @@ func SetupRoutes(app *fiber.App) {
 	appointment.RegisterRoutes(api)     // Tambahkan registrasi route appointment
 	membership.RegisterRoutes(api)      // Tambahkan registrasi route membership
 	voucher.RegisterRoutes(api)         // Tambahkan registrasi route voucher
+	barang.RegisterRoutes(api)          // Tambahkan registrasi route baran
 }

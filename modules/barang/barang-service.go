@@ -31,7 +31,7 @@ func (s *barangService) GetByID(id uint) (*models.Barang, error) {
 }
 
 func (s *barangService) Create(data *models.Barang) error {
-	data.KodeBarang = utils.GenerateID(config.DB, "BRG", true)
+	data.KodeBarang = utils.GenerateID(config.DB, "MTR", true)
 	return s.repo.CreateBarang(*data)
 }
 
