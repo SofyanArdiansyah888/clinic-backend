@@ -3,7 +3,8 @@ package pembelianBarang
 import (
 	"backend/models"
 	"backend/utils"
-	"time"
+		"backend/config"
+	customtypes	"backend/models/customTypes"
 )
 
 type PembelianBarangService struct {
@@ -15,14 +16,14 @@ func NewPembelianBarangService(repo *PembelianBarangRepository) *PembelianBarang
 }
 
 type CreatePembelianRequest struct {
-	TanggalTransaksi  time.Time                      `json:"tanggal_transaksi" validate:"required"`
-	TanggalJT        time.Time                      `json:"tanggal_jt" validate:"required"`
+	TanggalTransaksi  customtypes.DateOnly                      `json:"tanggal_transaksi" validate:"required"`
+	TanggalJT        customtypes.DateOnly                      `json:"tanggal_jt" validate:"required"`
 	NomorReferensi1   string                         `json:"nomor_referensi_1"`
 	NomorReferensi2   string                         `json:"nomor_referensi_2"`
 	NomorReferensi3   string                         `json:"nomor_referensi_3"`
 	JenisPembayaran  string                         `json:"jenis_pembayaran" validate:"required"`
 	MetodePembayaran string                         `json:"metode_pembayaran" validate:"required"`
-	IDCabang         uint                           `json:"id_cabang" validate:"required"`
+	IDCabang         uint                           `json:"id_cabang"`
 	Details          []CreatePembelianDetailRequest `json:"details" validate:"required,min=1"`
 }
 
@@ -37,7 +38,7 @@ type CreatePembelianDetailRequest struct {
 
 func (s *PembelianBarangService) Create(req CreatePembelianRequest) (*models.TransaksiBarang, []models.TransaksiBarangDetail, error) {
 	// Generate nomor transaksi
-	nomorTransaksi := utils.GenerateTransactionNumber("INV", req.IDCabang)
+	nomorTransaksi := utils.GenerateID(config.DB,"INV", true)
 
 	// Hitung total
 	var totalHarga float64

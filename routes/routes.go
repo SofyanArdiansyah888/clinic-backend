@@ -48,5 +48,5 @@ func SetupRoutes(app *fiber.App) {
 	membership.RegisterRoutes(api)      // Tambahkan registrasi route membership
 	voucher.RegisterRoutes(api)         // Tambahkan registrasi route voucher
 	barang.RegisterRoutes(api)          // Tambahkan registrasi route barang
-	pembelian.RegisterRoutes(api)       // Tambahkan registrasi route pembelian
+	pembelianBarang.RegisterRoutes(api)       // Tambahkan registrasi route pembelian
 }

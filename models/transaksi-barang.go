@@ -1,14 +1,14 @@
 package models
 
 import (
-	"time"
+	customtypes "backend/models/customTypes"
 )
 
 type TransaksiBarang struct {
 	ID                uint      `json:"id" gorm:"primaryKey"`
 	NomorTransaksi    string    `json:"nomor_transaksi" gorm:"type:varchar(100);not null"`
-	TanggalTransaksi  time.Time `json:"tanggal_transaksi" gorm:"not null"`
-	TanggalJT        time.Time `json:"tanggal_jt" gorm:"default:null"`
+	TanggalTransaksi  customtypes.DateOnly `json:"tanggal_transaksi" gorm:"not null"`
+	TanggalJT        customtypes.DateOnly `json:"tanggal_jt" gorm:"default:null"`
 	NomorReferensi1   string    `json:"nomor_referensi_1" gorm:"type:varchar(100)"`
 	NomorReferensi2   string    `json:"nomor_referensi_2" gorm:"type:varchar(100)"`
 	NomorReferensi3   string    `json:"nomor_referensi_3" gorm:"type:varchar(100)"`

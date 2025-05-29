@@ -3,6 +3,7 @@ package config
 import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"backend/models"
 	"log"
 )
 
@@ -19,10 +20,10 @@ func ConnectDB() *gorm.DB {
 	}
 
 	// AUTOMIGRATE
-	// err = db.AutoMigrate(models.GetModels()...)
-	// if err != nil {
-	// 	log.Fatal("Failed to migrate database:", err)
-	// }
+	err = db.AutoMigrate(models.GetModels()...)
+	if err != nil {
+		log.Fatal("Failed to migrate database:", err)
+	}
 	DB = db
 	log.Println("Database connected")
 	return DB

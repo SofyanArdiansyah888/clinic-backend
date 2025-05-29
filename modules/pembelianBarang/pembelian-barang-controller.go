@@ -2,6 +2,7 @@ package pembelianBarang
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/go-playground/validator/v10"
 )
 
 type PembelianBarangController struct {
@@ -11,6 +12,8 @@ type PembelianBarangController struct {
 func NewPembelianBarangController(service *PembelianBarangService) *PembelianBarangController {
 	return &PembelianBarangController{service: service}
 }
+
+var validate = validator.New()
 
 func (c *PembelianBarangController) Create(ctx *fiber.Ctx) error {
 	var req CreatePembelianRequest
@@ -22,7 +25,7 @@ func (c *PembelianBarangController) Create(ctx *fiber.Ctx) error {
 	}
 
 	// Validasi request
-	if err := ctx.Validate(req); err != nil {
+	if err := validate.Struct(req); err != nil {
 		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"message": "Validation failed",
 			"error":   err.Error(),

@@ -20,5 +20,7 @@ func GetModels() Models {
 		&Appointment{},
 		&Membership{},
 		&Voucher{},
+		&TransaksiBarang{},
+		&TransaksiBarangDetail{},
 	}
 }

@@ -2,11 +2,11 @@ package pembelianBarang
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"gorm.io/gorm"
+	"backend/config"
 )
 
-func RegisterRoutes(api fiber.Router, db *gorm.DB) {
-	repo := NewPembelianBarangRepository(db)
+func RegisterRoutes(api fiber.Router) {
+	repo := NewPembelianBarangRepository(config.DB)
 	service := NewPembelianBarangService(repo)
 	controller := NewPembelianBarangController(service)
 
