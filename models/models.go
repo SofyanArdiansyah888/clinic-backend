@@ -22,5 +22,6 @@ func GetModels() Models {
 		&Voucher{},
 		&TransaksiBarang{},
 		&TransaksiBarangDetail{},
+		&StokOpname{},
 	}
 }
