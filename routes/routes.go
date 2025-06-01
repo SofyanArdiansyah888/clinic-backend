@@ -4,10 +4,13 @@ import (
 	"backend/modules/antrian"
 	"backend/modules/appointment"
 	"backend/modules/bank"
+	"backend/modules/barang"
 	"backend/modules/cabang"
 	generateNumber "backend/modules/generateNumber"
 	"backend/modules/membership"
 	"backend/modules/pasien"
+	"backend/modules/pembelianBarang"
+	"backend/modules/penjualanBarang"
 	"backend/modules/perawatan"
 	"backend/modules/perusahaan"
 	"backend/modules/promo"
@@ -17,8 +20,7 @@ import (
 	"backend/modules/treatment"
 	"backend/modules/user"
 	"backend/modules/voucher"
-	"backend/modules/barang"
-	"backend/modules/pembelianBarang"
+
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -48,5 +50,6 @@ func SetupRoutes(app *fiber.App) {
 	membership.RegisterRoutes(api)      // Tambahkan registrasi route membership
 	voucher.RegisterRoutes(api)         // Tambahkan registrasi route voucher
 	barang.RegisterRoutes(api)          // Tambahkan registrasi route barang
-	pembelianBarang.RegisterRoutes(api)       // Tambahkan registrasi route pembelian
+	pembelianBarang.RegisterRoutes(api) // Tambahkan registrasi route pembelian
+	penjualanBarang.RegisterRoutes(api)
 }
