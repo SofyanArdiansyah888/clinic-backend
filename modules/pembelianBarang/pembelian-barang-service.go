@@ -1,10 +1,10 @@
 package pembelianBarang
 
 import (
+	"backend/config"
 	"backend/models"
 	"backend/utils"
-		"backend/config"
-	customtypes	"backend/models/customTypes"
+	"errors"
 )
 
 type PembelianBarangService struct {
@@ -15,72 +15,70 @@ func NewPembelianBarangService(repo *PembelianBarangRepository) *PembelianBarang
 	return &PembelianBarangService{repo: repo}
 }
 
-type CreatePembelianRequest struct {
-	TanggalTransaksi  customtypes.DateOnly                      `json:"tanggal_transaksi" validate:"required"`
-	TanggalJT        customtypes.DateOnly                      `json:"tanggal_jt" validate:"required"`
-	NomorReferensi1   string                         `json:"nomor_referensi_1"`
-	NomorReferensi2   string                         `json:"nomor_referensi_2"`
-	NomorReferensi3   string                         `json:"nomor_referensi_3"`
-	JenisPembayaran  string                         `json:"jenis_pembayaran" validate:"required"`
-	MetodePembayaran string                         `json:"metode_pembayaran" validate:"required"`
-	IDCabang         uint                           `json:"id_cabang"`
-	Details          []CreatePembelianDetailRequest `json:"details" validate:"required,min=1"`
-}
+func (s *PembelianBarangService) Create(req CreatePembelianRequest) (*models.TransaksiBarang, error) {
+	idCabang := 1
+	// Validate barang existence and prepare stock updates
+	stockUpdates := make(map[string]int)
+	for _, detail := range req.Details {
+		// Check if barang exists
+		stok, err := s.repo.GetStokByKodeBarang(detail.KodeBarang)
+		if err != nil {
+			return nil, errors.New("barang not found: " + detail.KodeBarang)
+		}
 
-type CreatePembelianDetailRequest struct {
-	KodeBarang string  `json:"kode_barang" validate:"required"`
-	Harga      float64 `json:"harga" validate:"required"`
-	Jumlah     int     `json:"jumlah" validate:"required"`
-	Diskon     float64 `json:"diskon"`
-	PPN        float64 `json:"ppn"`
-	Ongkir     float64 `json:"ongkir"`
-}
+		// Calculate new stock
+		newStok := stok + detail.Jumlah
+		stockUpdates[detail.KodeBarang] = newStok
+	}
 
-func (s *PembelianBarangService) Create(req CreatePembelianRequest) (*models.TransaksiBarang, []models.TransaksiBarangDetail, error) {
 	// Generate nomor transaksi
-	nomorTransaksi := utils.GenerateID(config.DB,"INV", true)
+	nomorTransaksi := utils.GenerateID(config.DB, "INV", true)
 
-	// Hitung total
-	var totalHarga float64
+	// Prepare transaksi header
+	transaksi := &models.TransaksiBarang{
+		NomorTransaksi:   nomorTransaksi,
+		TanggalTransaksi: req.TanggalTransaksi,
+		TanggalJT:        req.TanggalJT,
+		NomorReferensi1:  req.NomorReferensi1,
+		NomorReferensi2:  req.NomorReferensi2,
+		NomorReferensi3:  req.NomorReferensi3,
+		Tipe:             "masuk",
+		JenisPembayaran:  req.JenisPembayaran,
+		MetodePembayaran: req.MetodePembayaran,
+		IDCabang:         uint(idCabang),
+	}
+
+	// Prepare detail transaksi
 	details := make([]models.TransaksiBarangDetail, len(req.Details))
+	var totalHarga float64
+
 	for i, d := range req.Details {
 		subtotal := d.Harga * float64(d.Jumlah)
 		subtotal = subtotal - d.Diskon + d.PPN + d.Ongkir
 		totalHarga += subtotal
 
 		details[i] = models.TransaksiBarangDetail{
-			KodeBarang: d.KodeBarang,
-			Harga:      d.Harga,
-			Jumlah:     d.Jumlah,
-			Diskon:     d.Diskon,
-			PPN:        d.PPN,
-			Ongkir:     d.Ongkir,
-			Tipe:       "masuk",
+			KodeBarang:     d.KodeBarang,
+			Harga:          d.Harga,
+			Jumlah:         d.Jumlah,
+			Diskon:         d.Diskon,
+			PPN:            d.PPN,
+			Ongkir:         d.Ongkir,
+			Tipe:           "masuk",
+			IDCabang:       uint(idCabang),
+			NomorTransaksi: nomorTransaksi,
 		}
 	}
 
-	// Buat transaksi
-	transaksi := &models.TransaksiBarang{
-		NomorTransaksi:   nomorTransaksi,
-		TanggalTransaksi: req.TanggalTransaksi,
-		TanggalJT:       req.TanggalJT,
-		NomorReferensi1:  req.NomorReferensi1,
-		NomorReferensi2:  req.NomorReferensi2,
-		NomorReferensi3:  req.NomorReferensi3,
-		Tipe:            "masuk",
-		JenisPembayaran: req.JenisPembayaran,
-		MetodePembayaran: req.MetodePembayaran,
-		TotalHarga:      totalHarga,
-		IDCabang:        req.IDCabang,
-	}
+	transaksi.TotalHarga = totalHarga
 
-	// Simpan ke database
-	err := s.repo.Create(transaksi, details)
+	// Execute transaction
+	err := s.repo.CreateTransaksiAndUpdateStock(transaksi, details, stockUpdates)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
-	return transaksi, details, nil
+	return transaksi, nil
 }
 
 func (s *PembelianBarangService) GetByNomor(nomorTransaksi string) (*models.TransaksiBarang, []models.TransaksiBarangDetail, error) {

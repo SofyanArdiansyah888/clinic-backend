@@ -1,8 +1,8 @@
 package pembelianBarang
 
 import (
-	"github.com/gofiber/fiber/v2"
 	"github.com/go-playground/validator/v10"
+	"github.com/gofiber/fiber/v2"
 )
 
 type PembelianBarangController struct {
@@ -32,7 +32,7 @@ func (c *PembelianBarangController) Create(ctx *fiber.Ctx) error {
 		})
 	}
 
-	transaksi, details, err := c.service.Create(req)
+	transaksi, err := c.service.Create(req)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": "Failed to create pembelian",
@@ -41,9 +41,8 @@ func (c *PembelianBarangController) Create(ctx *fiber.Ctx) error {
 	}
 
 	return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{
-		"message":  "Pembelian created successfully",
+		"message":   "Pembelian created successfully",
 		"transaksi": transaksi,
-		"details":   details,
 	})
 }
 

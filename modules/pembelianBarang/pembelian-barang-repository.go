@@ -1,8 +1,9 @@
 package pembelianBarang
 
 import (
-	"gorm.io/gorm"
 	"backend/models"
+
+	"gorm.io/gorm"
 )
 
 type PembelianBarangRepository struct {
@@ -13,25 +14,40 @@ func NewPembelianBarangRepository(db *gorm.DB) *PembelianBarangRepository {
 	return &PembelianBarangRepository{db: db}
 }
 
-func (r *PembelianBarangRepository) Create(transaksi *models.TransaksiBarang, details []models.TransaksiBarangDetail) error {
+// Repository: Fokus pada operasi database
+// Add this method to PembelianBarangRepository
+func (r *PembelianBarangRepository) CreateTransaksiAndUpdateStock(transaksi *models.TransaksiBarang, details []models.TransaksiBarangDetail, stockUpdates map[string]int) error {
 	return r.db.Transaction(func(tx *gorm.DB) error {
-		// Simpan header transaksi
+		// Create transaksi
 		if err := tx.Create(transaksi).Error; err != nil {
 			return err
 		}
 
-		// Simpan detail transaksi
+		// Create details
 		for _, detail := range details {
-			detail.NomorTransaksi = transaksi.NomorTransaksi
-			detail.IDCabang = transaksi.IDCabang
-			detail.Tipe = transaksi.Tipe
 			if err := tx.Create(&detail).Error; err != nil {
+				return err
+			}
+		}
+
+		// Update stock
+		for kodeBarang, newStock := range stockUpdates {
+			if err := tx.Model(&models.Barang{}).Where("kode_barang = ?", kodeBarang).Update("stok", newStock).Error; err != nil {
 				return err
 			}
 		}
 
 		return nil
 	})
+}
+
+func (r *PembelianBarangRepository) GetStokByKodeBarang(kodeBarang string) (int, error) {
+	var barang models.Barang
+	err := r.db.Select("stok").Where("kode_barang = ?", kodeBarang).First(&barang).Error
+	if err != nil {
+		return 0, err
+	}
+	return barang.Stok, nil
 }
 
 func (r *PembelianBarangRepository) FindByNomor(nomorTransaksi string) (*models.TransaksiBarang, []models.TransaksiBarangDetail, error) {
