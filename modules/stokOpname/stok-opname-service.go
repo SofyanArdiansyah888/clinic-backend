@@ -30,5 +30,5 @@ func (s *stokOpnameService) GetByID(id uint) (*models.StokOpname, error) {
 
 func (s *stokOpnameService) Create(data *models.StokOpname) error {
 	data.NoStokOpname = utils.GenerateID(config.DB, "STO", true)
-	return s.repo.Create(data)
+	return s.repo.CreateAndUpdateStok(data)
 }

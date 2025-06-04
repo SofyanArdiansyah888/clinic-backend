@@ -32,7 +32,9 @@ func (r *PembelianBarangRepository) CreateTransaksiAndUpdateStock(transaksi *mod
 
 		// Update stock
 		for kodeBarang, newStock := range stockUpdates {
-			if err := tx.Model(&models.Barang{}).Where("kode_barang = ?", kodeBarang).Update("stok", newStock).Error; err != nil {
+			if err := tx.Model(&models.Barang{}).
+				Where("kode_barang = ?", kodeBarang).
+				Update("stok", newStock).Error; err != nil {
 				return err
 			}
 		}

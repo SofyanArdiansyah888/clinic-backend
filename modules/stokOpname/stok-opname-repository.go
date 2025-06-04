@@ -9,7 +9,7 @@ import (
 type IStokOpnameRepository interface {
 	FindAll() ([]models.StokOpname, error)
 	FindByID(id uint) (*models.StokOpname, error)
-	Create(stokOpname *models.StokOpname) error
+	CreateAndUpdateStok(stokOpname *models.StokOpname) error
 }
 
 type stokOpnameRepository struct {
@@ -32,6 +32,22 @@ func (r *stokOpnameRepository) FindByID(id uint) (*models.StokOpname, error) {
 	return &stokOpname, err
 }
 
-func (r *stokOpnameRepository) Create(stokOpname *models.StokOpname) error {
-	return r.db.Create(stokOpname).Error
+func (r *stokOpnameRepository) CreateAndUpdateStok(stokOpname *models.StokOpname) error {
+	err := r.db.Transaction(func(tx *gorm.DB) error {
+		// Create new stock opname record
+		if err := tx.Create(stokOpname).Error; err != nil {
+			return err
+		}
+
+		// Update actual stock quantity in barang table
+		if err := tx.Model(&models.Barang{}).
+			Where("kode_barang = ?", stokOpname.Barang.KodeBarang).
+			Update("stok", stokOpname.StokRiil).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	return err
 }
