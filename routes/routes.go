@@ -8,6 +8,7 @@ import (
 	"backend/modules/cabang"
 	generateNumber "backend/modules/generateNumber"
 	"backend/modules/kartuStok"
+	"backend/modules/konversiBarang"
 	"backend/modules/membership"
 	"backend/modules/pasien"
 	"backend/modules/pembelianBarang"
@@ -56,4 +57,5 @@ func SetupRoutes(app *fiber.App) {
 	penjualanBarang.RegisterRoutes(api)
 	stokOpname.RegisterRoutes(api)
 	kartuStok.RegisterRoutes(api)
+	konversiBarang.RegisterRoutes(api)
 }
