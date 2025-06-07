@@ -26,5 +26,9 @@ func GetModels() Models {
 		&Penjualan{},
 		&PenjualanDetail{},
 		&StokMovement{},
+		&KonversiStok{},
+		&KonversiStokDetail{},
+		&ProduksiBarang{},
+		&ProduksiBarangDetail{},
 	}
 }
