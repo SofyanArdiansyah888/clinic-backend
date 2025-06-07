@@ -9,7 +9,7 @@ type StokMovement struct {
 	KodeBarang string `gorm:"not null" json:"kode_barang"`
 	// Barang     Barang `gorm:"foreignKey:KodeBarang" json:"barang"`
 	Quantity int    `gorm:"not null" json:"quantity"`
-	Jenis    string `gorm:"not null" json:"type"`
+	Jenis    string `gorm:"not null" json:"jenis"`
 	//  pembelian, penjualan, penyesuaian, konversi masuk, konversi keluar,
 	//  produksi masuk, produksi keluar, transfer masuk, transfer keluar,
 	//  return pembelian, retur penjualan
