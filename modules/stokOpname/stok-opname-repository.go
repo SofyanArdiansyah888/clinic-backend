@@ -52,7 +52,7 @@ func (r *stokOpnameRepository) CreateAndUpdateStok(stokOpname *models.StokOpname
 			Quantity:      stokOpname.StokRiil - stokOpname.StokSistem, // Difference between real and system stock
 			Jenis:         "penyesuaian",
 			KodeReferensi: stokOpname.NoStokOpname,
-			Keterangan:    stokOpname.Alasan,
+			Keterangan:    stokOpname.Keterangan,
 		}
 		if err := tx.Create(&stockMovement).Error; err != nil {
 			return err

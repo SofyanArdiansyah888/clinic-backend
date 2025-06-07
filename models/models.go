@@ -25,5 +25,6 @@ func GetModels() Models {
 		&PembelianDetail{},
 		&Penjualan{},
 		&PenjualanDetail{},
+		&StokMovement{},
 	}
 }

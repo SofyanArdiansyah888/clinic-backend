@@ -24,7 +24,7 @@ func (h *Controller) Index(c *fiber.Ctx) error {
 		config.DB,
 		&stokOpnames,
 		[]string{"kode_stok_opname", "tanggal", "keterangan", "status"},
-		[]string{"tanggal"},
+		[]string{"tanggal", "lokasi_barang"},
 	)
 	if err != nil {
 		return utils.Error(c, fiber.StatusInternalServerError, "Failed to fetch stock opname data", err.Error())

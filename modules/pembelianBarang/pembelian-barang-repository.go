@@ -30,6 +30,21 @@ func (r *PembelianBarangRepository) CreateTransaksiAndUpdateStock(transaksi *mod
 			}
 		}
 
+		// Update stock movement for each purchased item
+		for _, detail := range details {
+			movement := models.StokMovement{
+				KodeBarang:    detail.KodeBarang,
+				KodeReferensi: transaksi.NoTransaksi,
+				Quantity:      detail.Jumlah,
+				Jenis:         "pembelian",
+				Keterangan:    "Pembelian barang dengan nomor referensi - " + transaksi.NoTransaksi,
+			}
+
+			if err := r.db.Create(&movement).Error; err != nil {
+				return nil
+			}
+		}
+
 		return nil
 	})
 }
@@ -46,21 +61,6 @@ func (r *PembelianBarangRepository) FindByNomor(nomorTransaksi string) (*models.
 	// Get details
 	if err := r.db.Where("no_transaksi = ?", nomorTransaksi).Find(&details).Error; err != nil {
 		return nil, nil, err
-	}
-
-	// Update stock movement for each purchased item
-	for _, detail := range details {
-		movement := models.StokMovement{
-			KodeBarang:    detail.KodeBarang,
-			KodeReferensi: transaksi.NoTransaksi,
-			Quantity:      detail.Jumlah,
-			Jenis:         "pembelian",
-			Keterangan:    "Pembelian dari supllier",
-		}
-
-		if err := r.db.Create(&movement).Error; err != nil {
-			return nil, nil, err
-		}
 	}
 
 	return &transaksi, details, nil
