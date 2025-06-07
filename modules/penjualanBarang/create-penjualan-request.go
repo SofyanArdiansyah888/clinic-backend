@@ -7,9 +7,8 @@ import (
 type CreatePenjualanRequest struct {
 	TanggalTransaksi customtypes.DateOnly           `json:"tanggal_transaksi" validate:"required"`
 	TanggalJT        customtypes.DateOnly           `json:"tanggal_jt"`
-	NomorReferensi1  string                         `json:"nomor_referensi_1"`
-	NomorReferensi2  string                         `json:"nomor_referensi_2"`
-	NomorReferensi3  string                         `json:"nomor_referensi_3"`
+	NoReferensi      string                         `json:"no_referensi"`
+	NoCustomer       string                         `json:"no_customer"`
 	JenisPembayaran  string                         `json:"jenis_pembayaran"`
 	MetodePembayaran string                         `json:"metode_pembayaran"`
 	IDCabang         uint                           `json:"id_cabang"`

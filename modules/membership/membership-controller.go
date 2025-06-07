@@ -23,7 +23,7 @@ func (h *Controller) Index(c *fiber.Ctx) error {
 		c,
 		config.DB.Preload("Pasien"),
 		&memberships,
-		[]string{"nomor_membership", "tipe_membership", "status"},
+		[]string{"no_membership", "tipe_membership", "status"},
 		[]string{"created_at", "status"},
 	)
 	if err != nil {

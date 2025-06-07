@@ -7,7 +7,7 @@ import (
 type Membership struct {
 	ID              uint      `gorm:"primaryKey" json:"id"`
 	PasienID        uint      `json:"pasien_id"`
-	NomorMembership string    `gorm:"type:varchar(50);unique" json:"nomor_membership"`
+	NoMembership    string    `gorm:"type:varchar(50);unique" json:"no_membership"`
 	TipeMembership  string    `gorm:"type:varchar(50)" json:"tipe_membership"` // silver, gold, platinum
 	TanggalMulai    time.Time `json:"tanggal_mulai"`
 	TanggalBerakhir time.Time `json:"tanggal_berakhir"`

@@ -50,7 +50,7 @@ func (s *membershipService) Create(data *models.Membership) error {
 	}
 
 	// Generate membership number
-	data.NomorMembership = utils.GenerateID(config.DB, "MBR", true)
+	data.NoMembership = utils.GenerateID(config.DB, "MBR", true)
 
 	// Set default status if not provided
 	if data.Status == "" {
@@ -87,7 +87,7 @@ func (s *membershipService) Update(id uint, data *models.Membership) error {
 
 	// Preserve unchangeable fields
 	data.ID = existing.ID
-	data.NomorMembership = existing.NomorMembership
+	data.NoMembership = existing.NoMembership
 	data.PasienID = existing.PasienID
 
 	return s.repo.Update(data)

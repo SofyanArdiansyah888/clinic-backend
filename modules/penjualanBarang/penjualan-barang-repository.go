@@ -16,7 +16,7 @@ func NewPenjualanBarangRepository(db *gorm.DB) *PenjualanBarangRepository {
 
 // Repository: Fokus pada operasi database
 // Add this method to PenjualanBarangRepository
-func (r *PenjualanBarangRepository) CreateTransaksiAndUpdateStock(transaksi *models.TransaksiBarang, details []models.TransaksiBarangDetail, stockUpdates map[string]int) error {
+func (r *PenjualanBarangRepository) CreateTransaksiAndUpdateStock(transaksi *models.Penjualan, details []models.PenjualanDetail) error {
 	return r.db.Transaction(func(tx *gorm.DB) error {
 		// Create transaksi
 		if err := tx.Create(transaksi).Error; err != nil {
@@ -30,38 +30,37 @@ func (r *PenjualanBarangRepository) CreateTransaksiAndUpdateStock(transaksi *mod
 			}
 		}
 
-		// Update stock
-		for kodeBarang, newStock := range stockUpdates {
-			if err := tx.Model(&models.Barang{}).Where("kode_barang = ?", kodeBarang).Update("stok", newStock).Error; err != nil {
-				return err
-			}
-		}
-
 		return nil
 	})
 }
 
-func (r *PenjualanBarangRepository) GetStokByKodeBarang(kodeBarang string) (int, error) {
-	var barang models.Barang
-	err := r.db.Select("stok").Where("kode_barang = ?", kodeBarang).First(&barang).Error
-	if err != nil {
-		return 0, err
-	}
-	return barang.Stok, nil
-}
-
-func (r *PenjualanBarangRepository) FindByNomor(nomorTransaksi string) (*models.TransaksiBarang, []models.TransaksiBarangDetail, error) {
-	var transaksi models.TransaksiBarang
-	var details []models.TransaksiBarangDetail
+func (r *PenjualanBarangRepository) FindByNomor(nomorTransaksi string) (*models.Penjualan, []models.PenjualanDetail, error) {
+	var transaksi models.Penjualan
+	var details []models.PenjualanDetail
 
 	// Get header
-	if err := r.db.Where("nomor_transaksi = ?", nomorTransaksi).First(&transaksi).Error; err != nil {
+	if err := r.db.Where("no_transaksi = ?", nomorTransaksi).First(&transaksi).Error; err != nil {
 		return nil, nil, err
 	}
 
 	// Get details
-	if err := r.db.Where("nomor_transaksi = ?", nomorTransaksi).Find(&details).Error; err != nil {
+	if err := r.db.Where("no_transaksi = ?", nomorTransaksi).Find(&details).Error; err != nil {
 		return nil, nil, err
+	}
+
+	// Update stock movement for each purchased item
+	for _, detail := range details {
+		movement := models.StokMovement{
+			KodeBarang:    detail.KodeBarang,
+			KodeReferensi: transaksi.NoTransaksi,
+			Quantity:      -detail.Jumlah, // Negative quantity for sales
+			Jenis:         "penjualan",
+			Keterangan:    "Penjualan barang ke customer",
+		}
+
+		if err := r.db.Create(&movement).Error; err != nil {
+			return nil, nil, err
+		}
 	}
 
 	return &transaksi, details, nil

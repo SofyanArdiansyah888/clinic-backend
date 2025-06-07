@@ -11,11 +11,11 @@ type StokOpname struct {
 	Jenis        string               `json:"jenis"`
 	KodeBarang   string               `json:"kode_barang" gorm:"type:varchar(100);not null"`
 	NoStokOpname string               `gorm:"type:varchar(100);not null;unique" json:"no_stok_opname"`
-	Barang       Barang               `json:"barang" gorm:"foreignKey:kode_barang"`
-	StokSistem   int                  `json:"stok_sistem"`
-	StokRiil     int                  `json:"stok_riil"`
-	Alasan       string               `json:"alasan"`
-	Petugas      string               `json:"petugas"`
-	CreatedAt    time.Time            `json:"created_at"`
-	UpdatedAt    time.Time            `json:"updated_at"`
+	// Barang       Barang    `gorm:"references:KodeBarang;foreignKey:KodeBarang" json:"barang"`
+	StokSistem int       `json:"stok_sistem"`
+	StokRiil   int       `json:"stok_riil"`
+	Alasan     string    `json:"alasan"`
+	Petugas    string    `json:"petugas"`
+	CreatedAt  time.Time `json:"created_at"`
+	UpdatedAt  time.Time `json:"updated_at"`
 }

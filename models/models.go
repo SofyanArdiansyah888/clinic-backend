@@ -6,6 +6,7 @@ func GetModels() Models {
 	return Models{
 		&MonthlySequence{},
 		&Barang{},
+		&StokOpname{},
 		&LoginHistory{},
 		&User{},
 		&Pasien{},
@@ -20,8 +21,9 @@ func GetModels() Models {
 		&Appointment{},
 		&Membership{},
 		&Voucher{},
-		&TransaksiBarang{},
-		&TransaksiBarangDetail{},
-		&StokOpname{},
+		&Pembelian{},
+		&PembelianDetail{},
+		&Penjualan{},
+		&PenjualanDetail{},
 	}
 }

@@ -1,10 +1,10 @@
 package models
 
-type TransaksiBarangDetail struct {
-	ID             uint   `json:"id" gorm:"primaryKey"`
-	IDCabang       uint   `json:"id_cabang" gorm:"not null"`
-	NomorTransaksi string `json:"nomor_transaksi" gorm:"type:varchar(100);not null"`
-	KodeBarang     string `json:"kode_barang" gorm:"type:varchar(100);not null"`
+type PembelianDetail struct {
+	ID          uint   `json:"id" gorm:"primaryKey"`
+	IDCabang    uint   `json:"id_cabang" gorm:"not null"`
+	NoTransaksi string `json:"no_transaksi" gorm:"type:varchar(100);not null"`
+	KodeBarang  string `json:"kode_barang" gorm:"type:varchar(100);not null"`
 	// Barang          Barang          `json:"barang" gorm:"foreignKey:KodeBarang;references:KodeBarang"`
 	Harga          float64 `json:"harga" gorm:"type:decimal(15,2);not null"`
 	Jumlah         int     `json:"jumlah" gorm:"not null"`
@@ -15,5 +15,5 @@ type TransaksiBarangDetail struct {
 	Ongkir         float64 `json:"ongkir" gorm:"type:decimal(15,2);not null;default:0"`
 	Tipe           string  `json:"tipe" gorm:"type:varchar(20);not null"` // keluar, masuk
 	Cabang         Cabang  `json:"cabang" gorm:"foreignKey:IDCabang"`
-	// TransaksiBarang TransaksiBarang `json:"transaksi_barang" gorm:"foreignKey:NomorTransaksi;references:NomorTransaksi"`
+	// TransaksiBarang TransaksiBarang `json:"transaksi_barang" gorm:"foreignKey:NoTransaksi;references:NoTransaksi"`
 }

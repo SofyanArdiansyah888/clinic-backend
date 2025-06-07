@@ -4,14 +4,13 @@ import (
 	customtypes "backend/models/customTypes"
 )
 
-type TransaksiBarang struct {
+type Penjualan struct {
 	ID               uint                 `json:"id" gorm:"primaryKey"`
-	NomorTransaksi   string               `json:"nomor_transaksi" gorm:"type:varchar(100);not null"`
+	NoTransaksi      string               `json:"no_transaksi" gorm:"type:varchar(100);not null"`
 	TanggalTransaksi customtypes.DateOnly `json:"tanggal_transaksi" gorm:"not null"`
 	TanggalJT        customtypes.DateOnly `json:"tanggal_jt" gorm:"default:null"`
-	NomorReferensi1  string               `json:"nomor_referensi_1" gorm:"type:varchar(100)"`
-	NomorReferensi2  string               `json:"nomor_referensi_2" gorm:"type:varchar(100)"`
-	NomorReferensi3  string               `json:"nomor_referensi_3" gorm:"type:varchar(100)"`
+	NoReferensi      string               `json:"no_referensi" gorm:"type:varchar(100)"`
+	NoCustomer       string               `json:"no_customer" gorm:"type:varchar(100)"`
 	Tipe             string               `json:"tipe" gorm:"type:varchar(20);not null"` // keluar, masuk
 	JenisPembayaran  string               `json:"jenis_pembayaran" gorm:"type:varchar(50);not null"`
 	MetodePembayaran string               `json:"metode_pembayaran" gorm:"type:varchar(50);not null"`

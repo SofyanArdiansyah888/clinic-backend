@@ -41,8 +41,20 @@ func (r *stokOpnameRepository) CreateAndUpdateStok(stokOpname *models.StokOpname
 
 		// Update actual stock quantity in barang table
 		if err := tx.Model(&models.Barang{}).
-			Where("kode_barang = ?", stokOpname.Barang.KodeBarang).
+			Where("kode_barang = ?", stokOpname.KodeBarang).
 			Update("stok", stokOpname.StokRiil).Error; err != nil {
+			return err
+		}
+
+		// Create stock movement record for stock opname
+		stockMovement := models.StokMovement{
+			KodeBarang:    stokOpname.KodeBarang,
+			Quantity:      stokOpname.StokRiil - stokOpname.StokSistem, // Difference between real and system stock
+			Jenis:         "penyesuaian",
+			KodeReferensi: stokOpname.NoStokOpname,
+			Keterangan:    stokOpname.Alasan,
+		}
+		if err := tx.Create(&stockMovement).Error; err != nil {
 			return err
 		}
 
