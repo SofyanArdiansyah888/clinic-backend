@@ -15,6 +15,7 @@ import (
 	"backend/modules/penjualanBarang"
 	"backend/modules/perawatan"
 	"backend/modules/perusahaan"
+	"backend/modules/produksiBarang"
 	"backend/modules/promo"
 	"backend/modules/staff"
 	"backend/modules/stokOpname"
@@ -58,4 +59,5 @@ func SetupRoutes(app *fiber.App) {
 	stokOpname.RegisterRoutes(api)
 	kartuStok.RegisterRoutes(api)
 	konversiBarang.RegisterRoutes(api)
+	produksiBarang.RegisterRoutes(api)
 }
