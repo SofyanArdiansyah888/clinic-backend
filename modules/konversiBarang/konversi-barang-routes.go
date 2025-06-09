@@ -12,6 +12,7 @@ func RegisterRoutes(api fiber.Router) {
 	controller := NewKonversiBarangController(service)
 
 	konversi := api.Group("/konversi-stok")
+	konversi.Get("/", controller.Index)
 	konversi.Post("/", controller.Create)
 	konversi.Get("/:nomor", controller.GetByNomor)
 }

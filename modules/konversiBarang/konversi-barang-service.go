@@ -14,6 +14,9 @@ func NewKonversiBarangService(repo *KonversiBarangRepository) *KonversiBarangSer
 	return &KonversiBarangService{repo: repo}
 }
 
+func (s *KonversiBarangService) GetAll() ([]models.KonversiStok, error) {
+	return s.repo.FindAll()
+}
 func (s *KonversiBarangService) Create(req CreateKonversiRequest) (*models.KonversiStok, error) {
 
 	// Generate nomor transaksi
@@ -23,6 +26,7 @@ func (s *KonversiBarangService) Create(req CreateKonversiRequest) (*models.Konve
 	transaksi := &models.KonversiStok{
 		NoKonversi: nomorTransaksi,
 		Tanggal:    req.Tanggal,
+		Petugas:    "",
 	}
 
 	// Prepare detail transaksi
@@ -31,7 +35,7 @@ func (s *KonversiBarangService) Create(req CreateKonversiRequest) (*models.Konve
 	for i, d := range req.Details {
 		details[i] = models.KonversiStokDetail{
 			KodeBarang: d.KodeBarang,
-			NoKonversi: d.NoKonversi,
+			NoKonversi: nomorTransaksi,
 			Quantity:   d.Quantity,
 			Arah:       d.Arah,
 		}

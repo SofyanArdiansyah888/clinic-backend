@@ -1,6 +1,10 @@
 package konversiBarang
 
 import (
+	"backend/config"
+	"backend/models"
+	"backend/utils"
+
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 )
@@ -11,6 +15,25 @@ type KonversiBarangController struct {
 
 func NewKonversiBarangController(service *KonversiBarangService) *KonversiBarangController {
 	return &KonversiBarangController{service: service}
+}
+
+func (h *KonversiBarangController) Index(c *fiber.Ctx) error {
+	var konversis []models.KonversiStok
+
+	paginated, err := utils.Paginate(
+		c,
+		config.DB,
+		&konversis,
+		[]string{"no_konversi"},
+		[]string{},
+	)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to fetch conversion data",
+		})
+	}
+
+	return c.JSON(paginated)
 }
 
 var validate = validator.New()
