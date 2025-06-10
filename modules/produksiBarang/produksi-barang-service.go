@@ -31,7 +31,7 @@ func (s *ProduksiBarangService) Create(req CreateProduksiRequest) (*models.Produ
 	for i, d := range req.Details {
 		details[i] = models.ProduksiBarangDetail{
 			KodeBarang: d.KodeBarang,
-			NoProduksi: d.NoProduksi,
+			NoProduksi: nomorTransaksi,
 			Quantity:   d.Quantity,
 			Arah:       d.Arah,
 		}

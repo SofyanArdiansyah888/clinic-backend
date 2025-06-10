@@ -31,30 +31,34 @@ func (r *ProduksiBarangRepository) CreateTransaksiAndUpdateStock(transaksi *mode
 
 		// Update stock movement for produced items
 		for _, detail := range details {
-			// Decrease stock for raw materials
-			sourceMovement := models.StokMovement{
-				KodeBarang:    detail.KodeBarang,
-				KodeReferensi: transaksi.NoProduksi,
-				Quantity:      -int(detail.Quantity), // negative for reduction
-				Jenis:         "produksi keluar",
-				Keterangan:    "Bahan baku keluar untuk produksi dengan nomor - " + transaksi.NoProduksi,
+			if detail.Arah == "keluar" {
+				// Decrease stock for raw materials
+				sourceMovement := models.StokMovement{
+					KodeBarang:    detail.KodeBarang,
+					KodeReferensi: transaksi.NoProduksi,
+					Quantity:      -int(detail.Quantity), // negative for reduction
+					Jenis:         "produksi keluar",
+					Keterangan:    "Bahan baku keluar untuk produksi dengan nomor - " + transaksi.NoProduksi,
+				}
+
+				if err := tx.Create(&sourceMovement).Error; err != nil {
+					return err
+				}
 			}
 
-			if err := tx.Create(&sourceMovement).Error; err != nil {
-				return err
-			}
+			if detail.Arah == "masuk" {
+				// Increase stock for finished product
+				targetMovement := models.StokMovement{
+					KodeBarang:    detail.KodeBarang,
+					KodeReferensi: transaksi.NoProduksi,
+					Quantity:      int(detail.Quantity),
+					Jenis:         "produksi masuk",
+					Keterangan:    "Hasil produksi masuk dengan nomor - " + transaksi.NoProduksi,
+				}
 
-			// Increase stock for finished product
-			targetMovement := models.StokMovement{
-				KodeBarang:    detail.KodeBarang,
-				KodeReferensi: transaksi.NoProduksi,
-				Quantity:      int(detail.Quantity),
-				Jenis:         "produksi masuk",
-				Keterangan:    "Hasil produksi masuk dengan nomor - " + transaksi.NoProduksi,
-			}
-
-			if err := tx.Create(&targetMovement).Error; err != nil {
-				return err
+				if err := tx.Create(&targetMovement).Error; err != nil {
+					return err
+				}
 			}
 		}
 
