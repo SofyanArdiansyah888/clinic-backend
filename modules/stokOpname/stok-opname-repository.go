@@ -40,11 +40,11 @@ func (r *stokOpnameRepository) CreateAndUpdateStok(stokOpname *models.StokOpname
 		}
 
 		// Update actual stock quantity in barang table
-		if err := tx.Model(&models.Barang{}).
-			Where("kode_barang = ?", stokOpname.KodeBarang).
-			Update("stok", stokOpname.StokRiil).Error; err != nil {
-			return err
-		}
+		// if err := tx.Model(&models.Barang{}).
+		// 	Where("kode_barang = ?", stokOpname.KodeBarang).
+		// 	Update("stok", stokOpname.StokRiil).Error; err != nil {
+		// 	return err
+		// }
 
 		// Create stock movement record for stock opname
 		stockMovement := models.StokMovement{

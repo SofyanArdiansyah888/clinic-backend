@@ -2,12 +2,15 @@ package models
 
 import (
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type StokMovement struct {
+	gorm.Model
 	ID         uint   `gorm:"primaryKey" json:"id"`
-	KodeBarang string `gorm:"not null" json:"kode_barang"`
-	// Barang     Barang `gorm:"foreignKey:KodeBarang" json:"barang"`
+	KodeBarang string `gorm:"type:varchar(100);not null;index" json:"kode_barang"` // ← ensure it's indexed
+	// Barang     Barang `gorm:"foreignKey:KodeBarang;references:KodeBarang" json:"barang"`
 	Quantity int    `gorm:"not null" json:"quantity"`
 	Jenis    string `gorm:"not null" json:"jenis"`
 	//  pembelian, penjualan, penyesuaian, konversi masuk, konversi keluar,

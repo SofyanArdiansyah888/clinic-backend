@@ -18,18 +18,41 @@ func NewController(service IBarangService) *Controller {
 }
 
 func (h *Controller) Index(c *fiber.Ctx) error {
-	var barangs []models.Barang
-	paginated, err := utils.Paginate(
-		c,
-		config.DB,
-		&barangs,
-		[]string{"nama_barang", "kode_barang"},
-		[]string{"satuan", "jenis_barang", "lokasi_barang"},
-	)
-	if err != nil {
+	// Define a struct to hold the query results including total
+	type BarangWithTotal struct {
+		models.Barang
+		Stok int `json:"stok"`
+	}
+	var barangs []BarangWithTotal
+
+	// Create DB instance with preload and joins for stock calculation
+	query := `
+    SELECT 
+        b.*,
+        COALESCE(SUM(sm.quantity), 0) as stok
+    FROM barangs b
+    LEFT JOIN stok_movements sm ON sm.kode_barang = b.kode_barang
+    GROUP BY b.id
+`
+	if err := config.DB.Raw(query).Scan(&barangs).Error; err != nil {
 		return utils.Error(c, fiber.StatusInternalServerError, "Gagal mengambil data barang", err.Error())
 	}
-	return c.JSON(paginated)
+
+	return c.JSON(&utils.PaginatedResponse{
+		Data: barangs,
+	})
+
+	// paginated, err := utils.Paginate(
+	// 	c,
+	// 	config.DB.Raw(query).Scan(&barangs),
+	// 	&[]models.Barang{},
+	// 	[]string{"barangs.nama_barang", "barangs.kode_barang"},
+	// 	[]string{"barangs.satuan", "barangs.jenis_barang", "barangs.lokasi_barang"},
+	// )
+	// if err != nil {
+	// 	return utils.Error(c, fiber.StatusInternalServerError, "Gagal mengambil data barang", err.Error())
+	// }
+	// return c.JSON(paginated)
 }
 
 func (h *Controller) Show(c *fiber.Ctx) error {

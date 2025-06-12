@@ -23,8 +23,24 @@ func NewBarangRepository(db *gorm.DB) IBarangRepository {
 
 func (b *barangRepository) GetBarang() ([]models.Barang, error) {
 	var barang []models.Barang
-	err := b.db.Find(&barang).Error
-	return barang, err
+	err := b.db.Preload("StockMovements").Find(&barang).Error
+	if err != nil {
+		return nil, err
+	}
+
+	// Calculate total stock from stock movements
+	for i := range barang {
+		totalStock := 0
+		if err := b.db.Model(&models.StokMovement{}).
+			Where("kode_barang = ?", barang[i].KodeBarang).
+			Select("COALESCE(SUM(quantity), 0)").
+			Scan(&totalStock).Error; err != nil {
+			return nil, err
+		}
+		// Skip setting stock since it's no longer part of the barang model
+	}
+
+	return barang, nil
 }
 
 func (b *barangRepository) FindByID(id uint) (*models.Barang, error) {
