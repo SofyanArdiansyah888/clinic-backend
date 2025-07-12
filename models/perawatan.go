@@ -6,10 +6,10 @@ import (
 )
 
 type Perawatan struct {
-	ID          int                  `gorm:"primary_key" json:"id"`
-	IDAntrian   int64                `gorm:"not null" json:"id_antrian"`
-	IDPasien    int64                `gorm:"not null" json:"id_pasien"`
-	IDStaff     int64                `gorm:"not null" json:"id_staff"`
+	ID          uint                 `gorm:"primaryKey" json:"id"`
+	IDAntrian   uint                 `gorm:"not null" json:"id_antrian"`
+	IDPasien    uint                 `gorm:"not null" json:"id_pasien"`
+	IDStaff     uint                 `gorm:"not null" json:"id_staff"`
 	NoPerawatan string               `gorm:"unique not null" json:"no-perawatan"`
 	Pasien      Pasien               `gorm:"foreignKey:IDPasien" json:"pasien"`
 	Staff       Staff                `gorm:"foreignKey:IDStaff" json:"staff"`

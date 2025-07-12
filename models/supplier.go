@@ -5,7 +5,7 @@ import (
 )
 
 type Supplier struct {
-	ID         int       `gorm:"primary_key" json:"id"`
+	ID         uint      `gorm:"primaryKey" json:"id"`
 	Nama       string    `json:"nama" validate:"required"`
 	NoSupplier string    `gorm:"unique" json:"no_supplier" validate:"required"`
 	Telepon    string    `json:"telepon" validate:"required"`

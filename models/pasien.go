@@ -6,7 +6,7 @@ import (
 )
 
 type Pasien struct {
-	ID               int                  `gorm:"primary_key" json:"id"`
+	ID               uint                 `gorm:"primaryKey" json:"id"`
 	TanggalDaftar    customTypes.DateOnly `gorm:"type:date" json:"tanggal_daftar" validate:"required"`
 	NamaPasien       string               `json:"nama_pasien" validate:"required"`
 	NoRM             string               `gorm:"unique" json:"no_rm" validate:"required"`

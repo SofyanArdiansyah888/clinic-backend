@@ -15,9 +15,9 @@ const (
 )
 
 type Antrian struct {
-	ID        int64                `gorm:"primaryKey;" json:"id"`
-	IDPasien  int64                `gorm:"not null" json:"id_pasien"`
-	IDStaff   int64                `gorm:"not null" json:"id_staff"`
+	ID        uint                 `gorm:"primaryKey" json:"id"`
+	IDPasien  uint                 `gorm:"not null" json:"id_pasien"`
+	IDStaff   uint                 `gorm:"not null" json:"id_staff"`
 	Pasien    Pasien               `gorm:"foreignKey:IDPasien" json:"pasien"`
 	Staff     Staff                `gorm:"foreignKey:IDStaff" json:"staff"`
 	Tanggal   customtypes.DateTime `gorm:"not null" json:"tanggal"`

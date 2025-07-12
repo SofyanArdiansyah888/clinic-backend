@@ -23,7 +23,7 @@ const (
 )
 
 type Staff struct {
-	ID        int       `gorm:"primary_key" json:"id"`
+	ID        uint      `gorm:"primaryKey" json:"id"`
 	NoStaff   string    `gorm:"unique" json:"no_staff"`
 	Jabatan   Jabatan   `json:"jabatan" validate:"required"`
 	Nama      string    `json:"nama" validate:"required"`

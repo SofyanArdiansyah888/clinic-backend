@@ -43,12 +43,12 @@ const (
 
 type User struct {
 	ID       uint    `gorm:"primaryKey" json:"id"`
-	IDCabang int64   `gorm:"not null" json:"id_cabang"`
+	IDCabang uint    `gorm:"not null" json:"id_cabang"`
 	Cabang   *Cabang `gorm:"foreignKey:IDCabang;" json:"cabang"`
-	NoUser   string  `gorm:"unique" json:"no_user"`
-	Username string  `gorm:"unique" json:"username"`
-	Nama     string  `json:"nama"`
-	Password string  `json:"password"`
+	NoUser   string      `gorm:"unique" json:"no_user"`
+	Username string      `gorm:"unique" json:"username"`
+	Nama     string      `json:"nama"`
+	Password string      `json:"password"`
 	//@TODO: gorm:"type:jsonb" json:"akses"`
 	//Akses     StringArray `gorm:"type:jsonb" json:"akses"`
 	Akses     StringArray `gorm:"type:json" json:"akses"`

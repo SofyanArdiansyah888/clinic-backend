@@ -2,12 +2,9 @@ package models
 
 import (
 	"time"
-
-	"gorm.io/gorm"
 )
 
 type StokMovement struct {
-	gorm.Model
 	ID         uint   `gorm:"primaryKey" json:"id"`
 	KodeBarang string `gorm:"type:varchar(100);not null;index" json:"kode_barang"` // ← ensure it's indexed
 	// Barang     Barang `gorm:"foreignKey:KodeBarang;references:KodeBarang" json:"barang"`

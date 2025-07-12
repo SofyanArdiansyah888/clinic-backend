@@ -2,12 +2,9 @@ package models
 
 import (
 	"time"
-
-	"gorm.io/gorm"
 )
 
 type Barang struct {
-	gorm.Model
 	ID           uint   `gorm:"primaryKey" json:"id"`
 	NamaBarang   string `gorm:"type:text;not null" json:"nama_barang"`
 	KodeBarang   string `gorm:"type:varchar(100);not null;unique" json:"kode_barang"`

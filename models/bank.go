@@ -12,9 +12,9 @@ const (
 )
 
 type Bank struct {
-	ID         int       `gorm:"primary_key" json:"id"`
-	IDCabang   uint      `gorm:"not null" json:"id_cabang"`
-	Cabang     Cabang    `gorm:"foreignKey:IDCabang" json:"cabang"`
+	ID       uint   `gorm:"primaryKey" json:"id"`
+	IDCabang uint   `gorm:"not null" json:"id_cabang"`
+	Cabang   Cabang `gorm:"foreignKey:IDCabang" json:"cabang"`
 	NoBank     string    `gorm:"unique" json:"no_bank" validate:"required"`
 	NamaBank   string    `gorm:"string" json:"nama_bank"`
 	JenisBank  JenisBank `json:"jenis_bank" validate:"required"`

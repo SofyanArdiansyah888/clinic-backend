@@ -5,7 +5,7 @@ import (
 )
 
 type Perusahaan struct {
-	ID             int       `gorm:"primary_key" json:"id"`
+	ID             uint      `gorm:"primaryKey" json:"id"`
 	NamaPerusahaan string    `gorm:"string" json:"nama_perusahaan"`
 	Alamat         string    `gorm:"type:text;null" json:"alamat,omitempty"`
 	Telepon        string    `gorm:"type:string;null" json:"telepon,omitempty"`
