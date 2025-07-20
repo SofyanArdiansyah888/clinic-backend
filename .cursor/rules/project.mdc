@@ -1,0 +1,40 @@
+---
+alwaysApply: true
+---
+rules:
+  create:
+    - "Validate input data before processing"
+    - "Check and validate required fields"
+    - "Return appropriate success or error responses"
+    - "Log create operations for audit purposes"
+    - "Implement proper error handling"
+  read:
+    - "Support pagination for list operations"
+    - "Allow filtering and sorting of data"
+    - "Implement caching where appropriate"
+    - "Return consistent response format"
+    - "Handle 'not found' scenarios gracefully"
+  update:
+    - "Validate input data before processing updates"
+    - "Check if record exists before updating"
+    - "Implement optimistic locking when needed"
+    - "Return updated data in response"
+    - "Log update operations for audit trail"
+  delete:
+    - "Verify authorization before deletion"
+    - "Implement soft delete when appropriate"
+    - "Check dependencies before hard delete"
+    - "Return success or failure status"
+    - "Log delete operations"
+  general:
+    - "Follow RESTful API conventions"
+    - "Use proper HTTP status codes"
+    - "Implement request validation"
+    - "Handle errors consistently"
+    - "Document all endpoints"
+    - "Follow security best practices"
+    - "Maintain audit logs"
+    - "Use proper authentication and authorization"
+    - "Don't add additional library"
+    - "Only use library that already define before"
+    - "Use go fiber as import not gin or other libraries"

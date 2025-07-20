@@ -4,8 +4,9 @@ import (
 	"backend/config"
 	"backend/models"
 	"backend/utils"
-	"github.com/gofiber/fiber/v2"
 	"strconv"
+
+	"github.com/gofiber/fiber/v2"
 )
 
 type Controller struct {
@@ -42,6 +43,27 @@ func (h *Controller) Show(c *fiber.Ctx) error {
 		return utils.Error(c, fiber.StatusInternalServerError, "Antrian tidak ditemukan", err.Error())
 	}
 	return utils.Success(c, "Antrian ditemukan", 200, antrian)
+}
+
+func (h *Controller) CreateUserAntrian(c *fiber.Ctx) error {
+	var pasien models.Pasien
+	if err := c.BodyParser(&pasien); err != nil {
+		return utils.Error(c, fiber.StatusBadRequest, "Data pasien tidak valid", err.Error())
+	}
+
+	var antrian models.Antrian
+	antrian.NoAntrian = utils.GenerateID(config.DB, "ANT", true)
+	antrian.IDPasien = pasien.ID
+	if err := c.BodyParser(&antrian); err != nil {
+		return utils.Error(c, fiber.StatusBadRequest, "Data antrian tidak valid", err.Error())
+	}
+
+	err := h.service.createPasienAntrian(&pasien, &antrian)
+	if err != nil {
+		return utils.Error(c, fiber.StatusInternalServerError, "Gagal membuat antrian", err.Error())
+	}
+
+	return utils.Success(c, "Pasien dan Antrian berhasil dibuat", 200)
 }
 
 func (h *Controller) Store(c *fiber.Ctx) error {
