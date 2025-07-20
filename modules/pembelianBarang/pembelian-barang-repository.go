@@ -34,10 +34,10 @@ func (r *PembelianBarangRepository) CreateTransaksiAndUpdateStock(transaksi *mod
 		for _, detail := range details {
 			movement := models.StokMovement{
 				KodeBarang:    detail.KodeBarang,
-				KodeReferensi: transaksi.NoTransaksi,
+				KodeReferensi: transaksi.IDTransaksi,
 				Quantity:      detail.Jumlah,
 				Jenis:         "pembelian",
-				Keterangan:    "Pembelian barang dengan nomor referensi - " + transaksi.NoTransaksi,
+				Keterangan:    "Pembelian barang dengan nomor referensi - " + transaksi.IDTransaksi,
 			}
 
 			if err := r.db.Create(&movement).Error; err != nil {
@@ -54,12 +54,12 @@ func (r *PembelianBarangRepository) FindByNomor(nomorTransaksi string) (*models.
 	var details []models.PembelianDetail
 
 	// Get header
-	if err := r.db.Where("no_transaksi = ?", nomorTransaksi).First(&transaksi).Error; err != nil {
+	if err := r.db.Where("id_transaksi = ?", nomorTransaksi).First(&transaksi).Error; err != nil {
 		return nil, nil, err
 	}
 
 	// Get details
-	if err := r.db.Where("no_transaksi = ?", nomorTransaksi).Find(&details).Error; err != nil {
+	if err := r.db.Where("id_transaksi = ?", nomorTransaksi).Find(&details).Error; err != nil {
 		return nil, nil, err
 	}
 

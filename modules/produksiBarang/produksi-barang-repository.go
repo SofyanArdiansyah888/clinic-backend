@@ -71,12 +71,12 @@ func (r *ProduksiBarangRepository) FindByNomor(nomorTransaksi string) (*models.P
 	var details []models.ProduksiBarangDetail
 
 	// Get header
-	if err := r.db.Where("no_transaksi = ?", nomorTransaksi).First(&transaksi).Error; err != nil {
+	if err := r.db.Where("no_produksi = ?", nomorTransaksi).First(&transaksi).Error; err != nil {
 		return nil, nil, err
 	}
 
 	// Get details
-	if err := r.db.Where("no_transaksi = ?", nomorTransaksi).Find(&details).Error; err != nil {
+	if err := r.db.Where("id_produksi = ?", nomorTransaksi).Find(&details).Error; err != nil {
 		return nil, nil, err
 	}
 

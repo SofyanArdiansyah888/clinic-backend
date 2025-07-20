@@ -46,7 +46,7 @@ func (h *Controller) Show(c *fiber.Ctx) error {
 }
 
 func (h *Controller) Store(c *fiber.Ctx) error {
-	var appointment models.Appointment
+	var appointment CreateAppointmentRequest
 	if err := c.BodyParser(&appointment); err != nil {
 		return utils.Error(c, fiber.StatusBadRequest, "Format data tidak valid", err.Error())
 	}

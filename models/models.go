@@ -1,7 +1,9 @@
 package models
 
-type Models []interface{}
+// Models is a slice of pointers to all model structs for migration/registration.
+type Models []any
 
+// GetModels returns a slice of all model pointers for GORM auto-migration.
 func GetModels() Models {
 	return Models{
 		&MonthlySequence{},
@@ -20,13 +22,13 @@ func GetModels() Models {
 		&Bank{},
 		&TemplateConcern{},
 		&Appointment{},
+		&AppointmentTreatment{},
 		&Membership{},
 		&Voucher{},
 		&Pembelian{},
 		&PembelianDetail{},
 		&Penjualan{},
 		&PenjualanDetail{},
-
 		&KonversiStok{},
 		&KonversiStokDetail{},
 		&ProduksiBarang{},

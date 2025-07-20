@@ -22,11 +22,11 @@ func (s *PenjualanBarangService) Create(req CreatePenjualanRequest) (*models.Pen
 
 	// Prepare transaksi header
 	transaksi := &models.Penjualan{
-		NoTransaksi:      nomorTransaksi,
+		IDTransaksi:      nomorTransaksi,
 		TanggalTransaksi: req.TanggalTransaksi,
 		TanggalJT:        req.TanggalJT,
-		NoReferensi:      req.NoReferensi,
-		NoCustomer:       req.NoCustomer,
+		IDReferensi:      req.IDReferensi,
+		IDCustomer:       req.IDCustomer,
 		Tipe:             "keluar", // Changed from masuk to keluar
 		JenisPembayaran:  req.JenisPembayaran,
 		MetodePembayaran: req.MetodePembayaran,
@@ -51,7 +51,7 @@ func (s *PenjualanBarangService) Create(req CreatePenjualanRequest) (*models.Pen
 			Ongkir:      d.Ongkir,
 			Tipe:        "keluar", // Changed from masuk to keluar
 			IDCabang:    uint(idCabang),
-			NoTransaksi: nomorTransaksi,
+			IDTransaksi: nomorTransaksi,
 		}
 	}
 

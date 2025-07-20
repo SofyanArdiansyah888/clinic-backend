@@ -6,11 +6,11 @@ import (
 
 type Pembelian struct {
 	ID               uint                 `json:"id" gorm:"primaryKey"`
-	NoTransaksi      string               `json:"no_transaksi" gorm:"type:varchar(100);not null"`
+	IDTransaksi      string               `json:"id_transaksi" gorm:"type:varchar(100);not null"`
 	TanggalTransaksi customtypes.DateOnly `json:"tanggal_transaksi" gorm:"not null"`
 	TanggalJT        customtypes.DateOnly `json:"tanggal_jt" gorm:"default:null"`
-	NoReferensi      string               `json:"no_referensi" gorm:"type:varchar(100)"`
-	NoSupplier       string               `json:"no_supplier" gorm:"type:varchar(100)"`
+	IDReferensi      string               `json:"id_referensi" gorm:"type:varchar(100)"`
+	IDSupplier       string               `json:"id_supplier" gorm:"type:varchar(100)"`
 	Tipe             string               `json:"tipe" gorm:"type:varchar(20);not null"` // keluar, masuk
 	JenisPembayaran  string               `json:"jenis_pembayaran" gorm:"type:varchar(50);not null"`
 	MetodePembayaran string               `json:"metode_pembayaran" gorm:"type:varchar(50);not null"`

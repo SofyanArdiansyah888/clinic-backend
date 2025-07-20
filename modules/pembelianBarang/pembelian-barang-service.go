@@ -22,10 +22,10 @@ func (s *PembelianBarangService) Create(req CreatePembelianRequest) (*models.Pem
 
 	// Prepare transaksi header
 	transaksi := &models.Pembelian{
-		NoTransaksi:      nomorTransaksi,
+		IDTransaksi:      nomorTransaksi,
 		TanggalTransaksi: req.TanggalTransaksi,
 		TanggalJT:        req.TanggalJT,
-		NoReferensi:      req.NoReferensi,
+		IDReferensi:      req.IDReferensi,
 		Tipe:             "masuk",
 		JenisPembayaran:  req.JenisPembayaran,
 		MetodePembayaran: req.MetodePembayaran,
@@ -50,7 +50,7 @@ func (s *PembelianBarangService) Create(req CreatePembelianRequest) (*models.Pem
 			Ongkir:      d.Ongkir,
 			Tipe:        "masuk",
 			IDCabang:    uint(idCabang),
-			NoTransaksi: nomorTransaksi,
+			IDTransaksi: nomorTransaksi,
 		}
 	}
 

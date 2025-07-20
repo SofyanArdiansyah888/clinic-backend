@@ -77,12 +77,12 @@ func (r *KonversiBarangRepository) FindByNomor(nomorTransaksi string) (*models.K
 	var details []models.KonversiStokDetail
 
 	// Get header
-	if err := r.db.Where("no_transaksi = ?", nomorTransaksi).First(&transaksi).Error; err != nil {
+	if err := r.db.Where("no_konversi = ?", nomorTransaksi).First(&transaksi).Error; err != nil {
 		return nil, nil, err
 	}
 
 	// Get details
-	if err := r.db.Where("no_transaksi = ?", nomorTransaksi).Find(&details).Error; err != nil {
+	if err := r.db.Where("id_konversi = ?", nomorTransaksi).Find(&details).Error; err != nil {
 		return nil, nil, err
 	}
 

@@ -35,7 +35,7 @@ func (s *KonversiBarangService) Create(req CreateKonversiRequest) (*models.Konve
 	for i, d := range req.Details {
 		details[i] = models.KonversiStokDetail{
 			KodeBarang: d.KodeBarang,
-			NoKonversi: nomorTransaksi,
+			IDKonversi: nomorTransaksi,
 			Quantity:   d.Quantity,
 			Arah:       d.Arah,
 		}
