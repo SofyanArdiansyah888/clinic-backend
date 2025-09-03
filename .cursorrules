@@ -1,0 +1,119 @@
+# Clinic Backend - Cursor Rules
+
+## 🚨 CRITICAL: Documentation-First Approach
+
+**BEFORE making ANY changes to the codebase, you MUST:**
+
+1. **ALWAYS read `/docs/coding-standards.md`** - This contains ALL coding patterns and conventions
+2. **ALWAYS check `/docs/folder-structure.md`** - Understand the project organization
+3. **ALWAYS review existing modules** - Follow established patterns
+4. **ALWAYS use Bahasa Indonesia** for error messages and user-facing text
+
+## 📚 Required Documentation References
+
+### Primary Documentation (MUST READ FIRST)
+- **📝 [Coding Standards](./docs/coding-standards.md)** - ALL coding patterns and conventions
+- **🏗️ [Folder Structure](./docs/folder-structure.md)** - Project organization and architecture
+- **🔌 [API Documentation](./docs/api-documentation.md)** - API patterns and response formats
+- **🛠️ [Development Guide](./docs/development-guide.md)** - Setup and workflow
+
+### Before Writing Code
+- [ ] Read coding standards documentation
+- [ ] Check existing module patterns
+- [ ] Follow naming conventions
+- [ ] Use proper error handling
+- [ ] Implement validation correctly
+
+## 🎯 Mandatory Patterns
+
+### File Structure
+```
+modules/{module-name}/
+├── {module}-controller.go
+├── {module}-service.go
+├── {module}-repository.go
+└── {module}-routes.go
+```
+
+### Error Handling
+```go
+// ALWAYS use these patterns
+return utils.Error(c, fiber.StatusBadRequest, "Data tidak valid")
+return utils.Success(c, "Berhasil dibuat", 201, data)
+```
+
+### Response Format
+- Success: Use `utils.Success()`
+- Error: Use `utils.Error()`
+- Messages MUST be in Bahasa Indonesia
+
+### Naming Conventions
+- Interfaces: `I{Module}Service`, `I{Module}Repository`
+- Structs: `{Module}Controller`, `{module}Service`
+- Functions: Follow existing patterns in similar modules
+
+## 🔧 Technical Requirements
+
+### Framework
+- **ONLY use Go Fiber** (NO Gin or other frameworks)
+- **ONLY use libraries in go.mod**
+- **Use GORM for database operations**
+- **Use go-playground/validator for validation**
+
+### Code Quality
+- Follow patterns from existing modules
+- Use proper error handling
+- Implement validation
+- Add comments for complex logic
+- Use meaningful variable names
+
+## 📋 Checklist Before Making Changes
+
+### For New Modules
+- [ ] Check `/docs/folder-structure.md` for organization
+- [ ] Read `/docs/coding-standards.md` for patterns
+- [ ] Review similar existing modules
+- [ ] Follow naming conventions
+- [ ] Implement proper error handling
+- [ ] Add validation
+- [ ] Update routes configuration
+
+### For Existing Code
+- [ ] Maintain consistency with existing patterns
+- [ ] Follow established naming conventions
+- [ ] Use same error handling approach
+- [ ] Keep same response format
+- [ ] Update documentation if needed
+
+## 🚫 What NOT to Do
+
+- ❌ Don't use different frameworks (only Go Fiber)
+- ❌ Don't add new external libraries without approval
+- ❌ Don't use English for error messages
+- ❌ Don't ignore existing patterns
+- ❌ Don't skip validation
+- ❌ Don't forget error handling
+
+## ✅ What TO Do
+
+- ✅ Always read documentation first
+- ✅ Follow established patterns
+- ✅ Use Bahasa Indonesia for messages
+- ✅ Implement proper validation
+- ✅ Handle errors correctly
+- ✅ Maintain consistency
+- ✅ Update documentation when needed
+
+## 🔍 Code Review Focus
+
+When reviewing or suggesting code changes, ensure:
+1. Follows coding standards from `/docs/coding-standards.md`
+2. Maintains consistency with existing codebase
+3. Uses proper error handling patterns
+4. Implements validation correctly
+5. Uses Bahasa Indonesia for messages
+6. Follows repository-service-controller pattern
+
+---
+
+**Remember: Documentation is the source of truth. Always check it first!**

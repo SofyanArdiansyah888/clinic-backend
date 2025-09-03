@@ -49,9 +49,7 @@ type User struct {
 	Username string      `gorm:"unique" json:"username"`
 	Nama     string      `json:"nama"`
 	Password string      `json:"password"`
-	//@TODO: gorm:"type:jsonb" json:"akses"`
-	//Akses     StringArray `gorm:"type:jsonb" json:"akses"`
-	Akses     StringArray `gorm:"type:json" json:"akses"`
+	Akses     StringArray `gorm:"type:jsonb" json:"akses"`
 	Role      Role        `json:"role"`
 	CreatedAt time.Time   `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt time.Time   `gorm:"autoUpdateTime" json:"updated_at"`

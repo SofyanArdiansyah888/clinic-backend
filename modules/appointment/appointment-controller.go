@@ -51,10 +51,10 @@ func (h *Controller) Store(c *fiber.Ctx) error {
 		return utils.Error(c, fiber.StatusBadRequest, "Format data tidak valid", err.Error())
 	}
 
-	err := h.service.Create(&appointment)
-	if err != nil {
-		return utils.Error(c, fiber.StatusInternalServerError, "Gagal membuat appointment", err.Error())
-	}
+	// err := h.service.Create(&appointment)
+	// if err != nil {
+	// 	return utils.Error(c, fiber.StatusInternalServerError, "Gagal membuat appointment", err.Error())
+	// }
 
 	return c.Status(fiber.StatusCreated).JSON(appointment)
 }

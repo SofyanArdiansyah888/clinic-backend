@@ -1,40 +1,209 @@
----
-alwaysApply: true
----
-rules:
-  create:
-    - "Validate input data before processing"
-    - "Check and validate required fields"
-    - "Return appropriate success or error responses"
-    - "Log create operations for audit purposes"
-    - "Implement proper error handling"
-  read:
-    - "Support pagination for list operations"
-    - "Allow filtering and sorting of data"
-    - "Implement caching where appropriate"
-    - "Return consistent response format"
-    - "Handle 'not found' scenarios gracefully"
-  update:
-    - "Validate input data before processing updates"
-    - "Check if record exists before updating"
-    - "Implement optimistic locking when needed"
-    - "Return updated data in response"
-    - "Log update operations for audit trail"
-  delete:
-    - "Verify authorization before deletion"
-    - "Implement soft delete when appropriate"
-    - "Check dependencies before hard delete"
-    - "Return success or failure status"
-    - "Log delete operations"
-  general:
-    - "Follow RESTful API conventions"
-    - "Use proper HTTP status codes"
-    - "Implement request validation"
-    - "Handle errors consistently"
-    - "Document all endpoints"
-    - "Follow security best practices"
-    - "Maintain audit logs"
-    - "Use proper authentication and authorization"
-    - "Don't add additional library"
+
+# Clinic Backend Project Rules
+
+## 📚 IMPORTANT: Always Read Documentation First
+Before making any changes or writing code, ALWAYS read and follow the documentation in `/docs/`:
+
+1. **📝 [Coding Standards](./docs/coding-standards.md)** - Follow these standards for ALL code
+2. **🏗️ [Folder Structure](./docs/folder-structure.md)** - Understand the project organization
+3. **🔌 [API Documentation](./docs/api-documentation.md)** - Follow API patterns
+4. **🛠️ [Development Guide](./docs/development-guide.md)** - Setup and development workflow
+
+## 🎯 Documentation-First Approach
+- **ALWAYS** check existing documentation before making changes
+- **ALWAYS** follow the established patterns in the codebase
+- **ALWAYS** use the coding standards defined in `/docs/coding-standards.md`
+- **ALWAYS** maintain consistency with existing modules
+- **ALWAYS** update documentation when adding new features
+
+## Core Principles
+- **Consistency**: Maintain consistent patterns across all modules
+- **Security**: Always prioritize security in all operations
+- **Performance**: Optimize for performance and scalability
+- **Maintainability**: Write clean, readable, and maintainable code
+- **Reliability**: Ensure robust error handling and data integrity
+
+## API Design Standards
+- **RESTful Conventions**: Follow REST principles strictly
+- **HTTP Status Codes**: Use appropriate status codes (200, 201, 400, 401, 403, 404, 500)
+- **Response Format**: Maintain consistent JSON response structure
+- **Versioning**: Use semantic versioning for API endpoints
+- **Documentation**: Document all endpoints with clear examples
+
+## CRUD Operations
+
+### CREATE Operations
+- ✅ **Input Validation**: Validate all input data before processing
+- ✅ **Required Fields**: Check and validate required fields with clear error messages
+- ✅ **Data Sanitization**: Sanitize input data to prevent injection attacks
+- ✅ **Response Format**: Return consistent success/error responses
+- ✅ **Audit Logging**: Log all create operations for audit trail
+- ✅ **Error Handling**: Implement comprehensive error handling with meaningful messages
+- ✅ **Transaction Safety**: Use database transactions for data integrity
+
+### READ Operations
+- ✅ **Pagination**: Implement pagination for all list operations
+- ✅ **Filtering**: Support flexible filtering and search capabilities
+- ✅ **Sorting**: Allow sorting by multiple fields
+- ✅ **Caching**: Implement appropriate caching strategies
+- ✅ **Response Consistency**: Return consistent response format
+- ✅ **Not Found Handling**: Handle missing data gracefully
+- ✅ **Performance**: Optimize queries and use proper indexing
+
+### UPDATE Operations
+- ✅ **Input Validation**: Validate all update data before processing
+- ✅ **Existence Check**: Verify record exists before updating
+- ✅ **Optimistic Locking**: Implement optimistic locking for concurrent updates
+- ✅ **Partial Updates**: Support partial updates when appropriate
+- ✅ **Audit Trail**: Log all update operations with before/after data
+- ✅ **Response Data**: Return updated data in response
+- ✅ **Authorization**: Verify user permissions before updates
+
+### DELETE Operations
+- ✅ **Authorization**: Verify authorization before any deletion
+- ✅ **Soft Delete**: Implement soft delete when appropriate
+- ✅ **Dependency Check**: Check dependencies before hard delete
+- ✅ **Cascade Handling**: Handle cascading deletes properly
+- ✅ **Status Response**: Return clear success/failure status
+- ✅ **Audit Logging**: Log all delete operations
+- ✅ **Data Recovery**: Provide data recovery mechanisms when possible
+
+## Technical Standards
+
+### Framework & Libraries
+- **Web Framework**: Use Go Fiber exclusively (NO Gin or other frameworks)
+- **Database**: Use GORM for database operations
+- **Validation**: Use go-playground/validator for input validation
+- **Dependencies**: Only use libraries already defined in go.mod
+- **No New Libraries**: Do not add new external dependencies without approval
+
+### Coding Standards (MANDATORY)
+**ALWAYS follow these patterns from `/docs/coding-standards.md`:**
+
+#### File Structure
+- Controllers: `{module}-controller.go`
+- Services: `{module}-service.go`
+- Repositories: `{module}-repository.go`
+- Routes: `{module}-routes.go`
+
+#### Naming Conventions
+- Interfaces: Use prefix "I" (e.g., `IAntrianService`)
+- Structs: Use PascalCase for exported, camelCase for private
+- Functions: Use descriptive names following existing patterns
+- Variables: Use camelCase
+
+#### Error Handling
+- Use `utils.Error()` for HTTP error responses
+- Use `utils.Success()` for HTTP success responses
+- Error messages MUST be in Bahasa Indonesia
+- Always check errors after function calls
+
+#### Response Format
+- Success: Use `utils.Success(c, message, statusCode, data)`
+- Error: Use `utils.Error(c, statusCode, message, detail)`
+- Follow the standard JSON response structure
+
+#### Database Operations
+- Use repository pattern with interfaces
+- Implement proper transaction handling
+- Use GORM tags for model definitions
+- Follow existing query patterns
+
+#### Validation
+- Use go-playground/validator tags
+- Implement custom validation when needed
+- Use `FormatValidationError()` for validation errors
+
+### Code Quality
+- **Error Handling**: Implement proper error handling with meaningful messages
+- **Logging**: Use structured logging for all operations
+- **Comments**: Add clear comments for complex logic
+- **Naming**: Use clear, descriptive variable and function names
+- **Structure**: Follow Go conventions and project structure
+
+### Security Requirements
+- **Authentication**: Implement proper authentication mechanisms
+- **Authorization**: Use role-based access control (RBAC)
+- **Input Validation**: Validate and sanitize all user inputs
+- **SQL Injection**: Use parameterized queries to prevent SQL injection
+- **XSS Prevention**: Sanitize output to prevent XSS attacks
+- **CSRF Protection**: Implement CSRF protection where needed
+- **Rate Limiting**: Implement rate limiting for API endpoints
+
+### Database Standards
+- **Migrations**: Use GORM auto-migration for schema changes
+- **Indexing**: Create appropriate indexes for performance
+- **Relationships**: Define proper foreign key relationships
+- **Constraints**: Use database constraints for data integrity
+- **Transactions**: Use transactions for multi-table operations
+
+### Response Format Standards
+```json
+{
+  "success": true,
+  "message": "Operation completed successfully",
+  "data": {},
+  "pagination": {
+    "page": 1,
+    "limit": 10,
+    "total": 100,
+    "total_pages": 10
+  },
+  "errors": null
+}
+```
+
+### Error Response Format
+```json
+{
+  "success": false,
+  "message": "Operation failed",
+  "data": null,
+  "errors": [
+    {
+      "field": "email",
+      "message": "Invalid email format"
+    }
+  ]
+}
+```
+
+## Module Structure Standards
+- **Controller**: Handle HTTP requests/responses and validation
+- **Service**: Implement business logic and orchestration
+- **Repository**: Handle database operations and queries
+- **Models**: Define data structures and relationships
+- **Routes**: Define API endpoints and middleware
+
+## Testing Requirements
+- **Unit Tests**: Write unit tests for all business logic
+- **Integration Tests**: Test API endpoints and database operations
+- **Error Scenarios**: Test error handling and edge cases
+- **Performance Tests**: Test performance for critical operations
+
+## Deployment & Monitoring
+- **Environment Variables**: Use environment variables for configuration
+- **Health Checks**: Implement health check endpoints
+- **Monitoring**: Add appropriate logging and monitoring
+- **Documentation**: Maintain up-to-date API documentation
+
+## 🔄 Before Making Changes Checklist
+- [ ] Read `/docs/coding-standards.md` for coding patterns
+- [ ] Check `/docs/folder-structure.md` for project organization
+- [ ] Review existing modules for consistency
+- [ ] Follow established naming conventions
+- [ ] Use proper error handling patterns
+- [ ] Implement validation as per standards
+- [ ] Update documentation if needed
+
+## 📋 Code Review Checklist
+- [ ] Follows coding standards from `/docs/coding-standards.md`
+- [ ] Maintains consistency with existing codebase
+- [ ] Uses proper error handling and response formats
+- [ ] Implements validation correctly
+- [ ] Uses Bahasa Indonesia for error messages
+- [ ] Follows repository-service-controller pattern
+- [ ] Includes proper comments and documentation
+
     - "Only use library that already define before"
     - "Use go fiber as import not gin or other libraries"

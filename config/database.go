@@ -3,9 +3,11 @@ package config
 import (
 	"backend/models"
 	"log"
+	"os"
 
-	"gorm.io/driver/mysql"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 var DB *gorm.DB
@@ -13,10 +15,10 @@ var DB *gorm.DB
 func ConnectDB() *gorm.DB {
 	// OPEN CONNECTION
 	//@TODO: Uncomment the following line to use environment variable for database connection
-	//dsn := os.Getenv("DATABASE_URL")
-	dsn := "u274107390_schaleup:#Bismillah_01@tcp(153.92.11.7:3306)/u274107390_schaleup?parseTime=true"
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
-		// Logger: logger.Default.LogMode(logger.Info),
+	dsn := os.Getenv("DATABASE_URL")
+	// dsn := "host=localhost user=root password=#Bismillah_01 dbname=clinic port=5433 sslmode=disable TimeZone=Asia/Jakarta"
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Info),
 	})
 	if err != nil {
 		log.Fatal("Failed to connect to database:", err)
